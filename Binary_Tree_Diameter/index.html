@@ -1,0 +1,55 @@
+<html>
+<script>
+function addNode(node,value) {
+
+	if(node.value === undefined) {
+		node.value = value;
+		return;
+	}
+
+	if(!node.left) {
+		node.left = {parent:node, value:value, left:undefined,right:undefined};
+		return;
+	}
+	else if(!node.right) {
+		node.right = {parent:node, value:value, left:undefined,right:undefined};
+		return;
+	}
+	else {
+		addNode(node.left);
+		return;
+	}
+}
+
+var root = {value:1};
+root.left = {value:2};
+root.right = {value:3};
+root.left.left = {value:4};
+root.left.right = {value:5};
+
+function height(node) {
+	if(!node) {
+		return 0;
+	}
+	return 1 + Math.max(height(node.left), height(node.right));
+}
+
+
+
+function diameter(node) {
+	
+	if(!node) {
+		return 0;
+	}
+	var hl = height(node.left);
+	var hr = height(node.right);
+
+	var dl = diameter(node.left);
+	var dr = diameter(node.right);
+
+	return Math.max(hl + hr + 1, Math.max(dl, dr));
+
+}
+console.log(root, diameter(root));
+</script>
+</html>
