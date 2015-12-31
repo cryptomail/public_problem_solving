@@ -1,0 +1,51 @@
+<html>
+
+<script>
+function constructMatrix(m) {
+	var x;
+	var n;
+	var matrix = [];
+	n = m;
+	var i,j;
+	j = m;
+
+	for(x=0; x < n; x++) {
+		var row = [];
+		for(i=0; i < j; i++) {
+			row.push(x*m+ i+1);
+		}
+		matrix.push(row);
+
+	}
+
+	return matrix;
+}
+
+function rot90(matrix) {
+	var x;
+	var n;
+	n = matrix[0].length;
+	var i,j;
+	j = matrix[0].length;
+	var matrixOut = [];
+	for(x=0; x < n; x++) {
+		var row = [];
+		for(i=0; i < j; i++) {
+			row.push(matrix[i][x]);
+			
+		}
+		matrixOut.push(row);
+
+	}
+
+	return matrixOut;
+}
+var matrixIn = constructMatrix(4);
+
+var matrixOut = rot90(matrixIn);
+
+console.log(matrixOut);
+
+
+</script>
+</html>
