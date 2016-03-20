@@ -101,7 +101,7 @@ public class zigZag {
 	}
 	public static void main(String args[]) {
 		zigZag zig = new zigZag();
-		System.out.println(zig.zig("PAYPALISHIRING",1));
+		System.out.println(zig.zig("PAYPALISHIRING",3));
 		return;
 	}
 }
