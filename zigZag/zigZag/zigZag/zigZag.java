@@ -36,6 +36,13 @@ public class zigZag {
 		return str;
 	}
 	public String zig(String str, int numlines) {
+		if(numlines <= 0) {
+			return null;
+		}
+		if(str == null || str.length() <= 0 || numlines <= 1 ) {
+			return (str == null) ? null : str;
+		}
+		
 		ArrayList<ArrayList<CharLoc>> lines = new ArrayList<ArrayList<CharLoc>>();
 		int x;
 		for(x=0; x < numlines; x++) {
@@ -94,7 +101,7 @@ public class zigZag {
 	}
 	public static void main(String args[]) {
 		zigZag zig = new zigZag();
-		System.out.println(zig.zig("PAYPALISHIRING",3));
+		System.out.println(zig.zig("PAYPALISHIRING",1));
 		return;
 	}
 }
