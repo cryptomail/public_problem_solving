@@ -16,6 +16,8 @@ I do the same operation with the result you sent me, so: A^b mod p.
 
 (g^a mod p)^b mod p = g^(ab) mod p ===> Bob takes Alice's A() exponent his secret modulo p
 (g^b mod p)^a mod p = g^(ba) mod p ===> Alice takes Bob's B() exponent his secret modulo p
+
+Alice computes g^(B) mod p, Bob computes g^A mod p
 Of note, communicative property of exponentiation! pretty cool.  Thus we have a shared secret: (g^a mod p)^b mod p === (g^b mod p)^a mod p
 *
 */
