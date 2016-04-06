@@ -41,6 +41,9 @@ Of note, communicative property of exponentiation! pretty cool.  Thus we have a 
         public BigInteger sharedSecret(Bob bob) {
             return bob.B().modPow(a, p);
         }
+         public BigInteger wrongsharedSecret(Bob bob) {
+             return bob.B().modPow(a.add(new BigInteger("2")), p);
+         }
     };
     class Bob{
         public BigInteger g;  // public
@@ -81,7 +84,12 @@ Of note, communicative property of exponentiation! pretty cool.  Thus we have a 
         BigInteger sharedSecretBob = bob.sharedSecret(alice);
 
         System.out.println("Checking shared secrets: (g^a mod p)^b mod p === (g^b mod p)^a mod p" + " " + (sharedSecretAlice.equals(sharedSecretBob)));
+
+        BigInteger wrongsharedSecretAlice = alice.wrongsharedSecret(bob);
         Assert.check(sharedSecretAlice.equals(sharedSecretBob));
+
+        System.out.println("Checking wrong shared secrets: " + " " + (wrongsharedSecretAlice.equals(sharedSecretBob)));
+        Assert.check(!wrongsharedSecretAlice.equals(sharedSecretBob));
     }
     public static void main(String[] args) {
 	// write your code here
