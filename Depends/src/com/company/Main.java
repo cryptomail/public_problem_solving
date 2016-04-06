@@ -109,7 +109,7 @@ public class Main {
         Dependency dependentModuleEntry = dependencyHashMap.get(dependentName);
 
         if(findDescendent(dependentName,moduleName)) {
-             emit(" depends on " + moduleName + " ignoring command.");
+             emit(" depends on " + dependentName + " ignoring command.\n");
             return -1;
         }
         if(dependentModuleEntry != null) {
@@ -295,6 +295,18 @@ public class Main {
         int retval = m.run(inputStream);
         Assert.check(retval == 0);
     }
+    static public void testDependFourLine() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("DEPEND TELNET TCPIP NETCARD\nDEPEND TCPIP NETCARD\nDEPEND NETCARD TCPIP\nDEPEND DNS TCPIP NETCARD\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
     /*
     just end success. nonce run.
      */
@@ -315,7 +327,7 @@ public class Main {
 	// write your code here
 
 
-        testDependThreeLine();
+        testDependFourLine();
 
 
     }
