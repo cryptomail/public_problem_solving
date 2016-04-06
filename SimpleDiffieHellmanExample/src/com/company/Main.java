@@ -14,16 +14,17 @@ I do the same thing, but we'll call my secret number b and the computed number B
 Now, you take the number I sent you and do the exact same operation with it. So that's B^a mod p.
 I do the same operation with the result you sent me, so: A^b mod p.
 
-(g^a mod p)^b mod p = g^(ab) mod p
-(g^b mod p)^a mod p = g^(ba) mod p
+(g^a mod p)^b mod p = g^(ab) mod p ===> Bob takes Alice's A() exponent his secret modulo p
+(g^b mod p)^a mod p = g^(ba) mod p ===> Alice takes Bob's B() exponent his secret modulo p
+Of note, communicative property of exponentiation! pretty cool.  Thus we have a shared secret: (g^a mod p)^b mod p === (g^b mod p)^a mod p
 *
-     */
+*/
 
      class Alice {
 
-        public BigInteger g;
-        public BigInteger p;
-        private BigInteger a;
+         public BigInteger g;  // public
+         public BigInteger p; // public for modulo
+        private BigInteger a; // super secret
 
         public Alice(BigInteger g, BigInteger p) {
             SecureRandom secureRandom = new SecureRandom();
@@ -42,9 +43,9 @@ I do the same operation with the result you sent me, so: A^b mod p.
         }
     };
     class Bob{
-        public BigInteger g;
-        public BigInteger p;
-        private BigInteger b;
+        public BigInteger g;  // public
+        public BigInteger p; // public for modulo
+        private BigInteger b; // super secret
 
         public Bob(BigInteger g, BigInteger p) {
             SecureRandom secureRandom = new SecureRandom();
