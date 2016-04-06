@@ -80,6 +80,7 @@ Of note, communicative property of exponentiation! pretty cool.  Thus we have a 
         BigInteger sharedSecretAlice = alice.sharedSecret(bob);
         BigInteger sharedSecretBob = bob.sharedSecret(alice);
 
+        System.out.println("Checking shared secrets: (g^a mod p)^b mod p === (g^b mod p)^a mod p" + " " + (sharedSecretAlice.equals(sharedSecretBob)));
         Assert.check(sharedSecretAlice.equals(sharedSecretBob));
     }
     public static void main(String[] args) {
