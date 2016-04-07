@@ -1,13 +1,40 @@
-package com.company;
 
-import com.sun.deploy.util.StringUtils;
-import com.sun.tools.javac.util.Assert;
 
 import java.io.*;
 import java.util.*;
 
+
+
 public class Main {
 
+    String theInput2 = "DEPEND TELNET TCPIP NETCARD\n"+
+            "DEPEND TCPIP NETCARD\n"+
+            "DEPEND DNS TCPIP NETCARD\n"+
+            "DEPEND BROWSER TCPIP HTML\n"+
+            "INSTALL NETCARD\n"+
+            "INSTALL TELNET\n"+
+            "LIST\n"+
+            "INSTALL foo\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL BROWSER\n"+
+            "LIST\n"+
+            "INSTALL DNS\n"+
+            "LIST\n"+
+            "REMOVE TELNET\n"+
+            "LIST\n"+
+            "REMOVE NETCARD\n"+
+            "REMOVE DNS\n"+
+            "LIST\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL NETCARD\n"+
+            "LIST\n"+
+            "REMOVE TCPIP\n"+
+            "REMOVE BROWSER\n"+
+            "REMOVE TCPIP\n"+
+            "REMOVE NETCARD\n"+
+            "LIST\n"+
+            "END";
+    
     String theInput = "DEPEND TELNET TCPIP NETCARD\n"+
             "DEPEND TCPIP NETCARD\n"+
             "DEPEND DNS TCPIP NETCARD\n"+
@@ -41,14 +68,78 @@ public class Main {
 
     public class DependencyInstance  {
 
-        protected int refCount;
+        protected HashMap<String,Integer> refCount;
         protected String installAgent;
         protected Dependency dependency;
         public DependencyInstance(Dependency dependency) {
             this.dependency = dependency;
             this.installAgent = null;
-            refCount = 0;
+            this.refCount = new HashMap();
+            
 
+        }
+        public boolean anyRef() {
+        	for(String from: refCount.keySet()) {
+        		if(refCount.get(from) > 0) {
+        			return true;
+        		}
+        	}
+        	return false;
+        }
+        public int totalRefExcept(String str) {
+        	int cnt = 0;
+        	for(String from: refCount.keySet()) {
+        		if(!str.equals(from)) {
+        			cnt += refCount.get(from);
+        		}
+        		
+        	}
+        	return cnt;
+        }
+        public int totalRef() {
+        	int cnt = 0;
+        	for(String from: refCount.keySet()) {
+        		cnt += refCount.get(from);
+        	}
+        	return cnt;
+        }
+        public boolean hasRefFrom(String from) {
+        	if(refCount.containsKey(from) && refCount.get(from) > 0) {
+        		return true;
+        	}
+        	
+        	return false;
+        }
+        public int addRefFrom(String from) {
+        	Integer i;
+        	if(refCount.containsKey(from))
+        	{
+        		i = refCount.get(from);
+        		
+        	}
+        	else {
+        		i = new Integer(0);
+        		
+        		
+        	}
+        	i++;
+        	if(i >= 0) {
+        		refCount.put(from, i);
+        	}
+        	
+        	return i;
+        }
+        public int removeRefFrom(String from) {
+        	Integer i;
+        	if(hasRefFrom(from) == false) {
+        		return 0;
+        	}
+        	i = refCount.get(from);
+        	i--;
+        	
+        	refCount.put(from, i);
+        	
+        	return i;
         }
     };
     public final static String COMMAND_END = "END";
@@ -197,7 +288,7 @@ public class Main {
         emit("\n");
         return 0;
     }
-    protected  boolean removeModule(String moduleName) {
+    protected  boolean removeModule(String moduleName, String agent) {
 
         if(!installManifest.containsKey(moduleName)) {
             return false;
@@ -205,25 +296,25 @@ public class Main {
         DependencyInstance dependencyInstance = installManifest.get(moduleName);
 
 
-        if(dependencyInstance.refCount > 1) {
-            return false;
-        }
 
-        boolean removed = true;
+        boolean removed = false;
         for(Dependency d : dependencyInstance.dependency.dependencyList) {
             DependencyInstance dependencyInstance1 = installManifest.get(d.moduleName);
             if(dependencyInstance1 == null) {
                 continue;
             }
-            dependencyInstance1.refCount--;
-            if(dependencyInstance1.refCount == 0) {
-                emit("\tremoving " + d.moduleName + "\n" );
-                installManifest.remove(d.moduleName);
-
-            }
+            removeModule(dependencyInstance1.dependency.moduleName,moduleName);
+            
         }
 
+        dependencyInstance.removeRefFrom(agent);
+        
+        if(dependencyInstance.anyRef() == false) {
+            emit("\tremoving " + dependencyInstance.dependency.moduleName + "\n" );
+            installManifest.remove(dependencyInstance.dependency.moduleName);
+            removed = true;
 
+        }
         return removed;
     }
     protected  boolean processRemoveLine(String line) {
@@ -244,44 +335,58 @@ public class Main {
             return false;
         }
 
-        boolean retval =  removeModule(moduleName);
+        
 
-        if(retval == false) {
-            emit("\t" + moduleName + " is still needed\n");
+        boolean retval;
+        if(installManifest.containsKey(moduleName) && installManifest.get(moduleName).totalRefExcept("commandline")  > 0 ) {
+            emit("\t" + moduleName + " is still needed " + installManifest.get(moduleName).refCount +  " \n");
+            retval = false;
         }
         else {
-            emit("\tremoving " + moduleName + "\n");
-            installManifest.remove(moduleName);
+        	 retval = removeModule(moduleName,"commandline");
         }
         return retval;
+    }
+    public String dump(HashMap<String,Integer> map) {
+    	String s = "";
+    	Iterator iterator = map.keySet().iterator();
+
+    	while (iterator.hasNext()) {
+    	   String key = iterator.next().toString();
+    	   Integer value = map.get(key);
+
+    	   s += (key + " " + value);
+    	}
+    	return s;
     }
     protected boolean installModule(String module, String agent) {
         Dependency dependency = dependencyHashMap.get(module);
         DependencyInstance dependencyInstance = installManifest.get(module);
-
-        boolean reallyDidIt = false;
+        
         if(dependency == null) {
-            dependency = new Dependency(module);
+        	dependency = new Dependency(module);
         }
+        boolean reallyDidIt = false;
+       
         if(dependencyInstance == null) {
             dependencyInstance = new DependencyInstance(dependency);
             reallyDidIt = true;
-
         }
-        dependencyInstance.refCount++;
+        dependencyInstance.addRefFrom(agent);
+        
         dependencyInstance.installAgent = agent;
+        emit("\tDEBUG: " + module + " " +  dependencyInstance.refCount + "\n");
         installManifest.put(module, dependencyInstance);
 
         for(Dependency d: dependency.dependencyList) {
 
-            installModule(d.moduleName, agent);
+            installModule(d.moduleName, module);
 
         }
+        
         if(reallyDidIt) {
-            emit("\tInstalling " + module + "\n");
+        	emit("\t installing " + module + "\n");
         }
-
-
         return reallyDidIt;
     }
     protected  int processInstall(String module, String agent) {
@@ -314,12 +419,12 @@ public class Main {
     protected void processListLine(String line) {
         emit("LIST\n");
         for(DependencyInstance dependencyInstance : installManifest.values()) {
-            emit("\t" + dependencyInstance.dependency.moduleName + "\n");
+            emit("\t" + dependencyInstance.dependency.moduleName + " " + dependencyInstance.refCount + "\n");
         }
     }
     protected  void processLine(String line) {
         if(line == null || line.length() == 0) {
-            Assert.check(false);
+            
             return;
         }
 
@@ -328,7 +433,7 @@ public class Main {
         }
 
         if(!isValidLine(line)) {
-            Assert.check(false);
+           
             return;
         }
 
@@ -405,7 +510,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == -1);
+       
     }
     /*
     No input ultra jerk input
@@ -418,7 +523,7 @@ public class Main {
          */
 
         int retval = m.run(null);
-        Assert.check(retval == -1);
+       
     }
 
     static public void testDependOneLine() {
@@ -431,7 +536,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependTwoLine() {
         Main m = new Main();
@@ -443,7 +548,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependThreeLine() {
         Main m = new Main();
@@ -455,7 +560,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependFourLine() {
         Main m = new Main();
@@ -467,7 +572,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependSixLine() {
         Main m = new Main();
@@ -479,7 +584,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependSevenLine() {
         Main m = new Main();
@@ -491,7 +596,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void testDependEightLine() {
         Main m = new Main();
@@ -503,7 +608,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     /*
     just end success. nonce run.
@@ -518,7 +623,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == -1);
+        //Assert.check(retval == -1);
     }
     /*
    just end success. nonce run.
@@ -533,7 +638,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
     }
     static public void fulltest_positive() {
         Main m = new Main();
@@ -545,7 +650,19 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        //Assert.check(retval == 0);
+    }
+    static public void fulltest_positive2() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer(m.theInput2);
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        //Assert.check(retval == 0);
     }
 
     static public void testListOnly() {
@@ -558,7 +675,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        Assert.check(retval == 0);
+        
     }
     public static void main(String[] args) {
 	// write your code here
@@ -578,9 +695,11 @@ public class Main {
         /*
         I think this is the final test
          */
-        fulltest_positive();
+        //fulltest_positive();
+        fulltest_positive2();
 
 
 
     }
 }
+
