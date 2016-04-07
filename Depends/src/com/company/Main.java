@@ -56,6 +56,27 @@ public class Main {
             "REMOVE TCPIP\n"+
             "END";
 
+    String theInput3 = "DEPEND TELNET TCPIP NETCARD\n"+
+            "DEPEND TCPIP NETCARD\n"+
+            "DEPEND DNS TCPIP NETCARD\n"+
+            "DEPEND BROWSER TCPIP HTML\n"+
+            "INSTALL NETCARD\n"+
+            "INSTALL TELNET\n"+
+            "INSTALL foo\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL BROWSER\n"+
+            "INSTALL DNS\n"+
+            "LIST\n"+
+            "REMOVE TELNET\n"+
+            "REMOVE NETCARD\n"+
+            "REMOVE DNS\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL NETCARD\n"+
+            "REMOVE TCPIP\n"+
+            "REMOVE BROWSER\n"+
+            "REMOVE TCPIP\n"+
+            "END";
+    
     public class Dependency {
         protected String moduleName;
         protected  List<Dependency> dependencyList;
@@ -339,7 +360,7 @@ public class Main {
 
         boolean retval;
         if(installManifest.containsKey(moduleName) && installManifest.get(moduleName).totalRefExcept("commandline")  > 0 ) {
-            emit("\t" + moduleName + " is still needed " + installManifest.get(moduleName).refCount +  " \n");
+            emit("\t" + moduleName + " is still needed " + /*installManifest.get(moduleName).refCount + */ " \n");
             retval = false;
         }
         else {
@@ -375,7 +396,7 @@ public class Main {
         dependencyInstance.addRefFrom(agent);
         
         dependencyInstance.installAgent = agent;
-        emit("\tDEBUG: " + module + " " +  dependencyInstance.refCount + "\n");
+        //emit("\tDEBUG: " + module + " " +  dependencyInstance.refCount + "\n");
         installManifest.put(module, dependencyInstance);
 
         for(Dependency d: dependency.dependencyList) {
@@ -419,7 +440,7 @@ public class Main {
     protected void processListLine(String line) {
         emit("LIST\n");
         for(DependencyInstance dependencyInstance : installManifest.values()) {
-            emit("\t" + dependencyInstance.dependency.moduleName + " " + dependencyInstance.refCount + "\n");
+            emit("\t" + dependencyInstance.dependency.moduleName + " " + /*dependencyInstance.refCount +*/ "\n");
         }
     }
     protected  void processLine(String line) {
