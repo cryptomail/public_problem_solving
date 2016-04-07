@@ -171,6 +171,7 @@ public class Main {
 
     protected HashMap<String,Dependency> dependencyHashMap;
     protected HashMap<String,DependencyInstance> installManifest;
+    public boolean isDebug = false; //someone can set this
 
 
     public Main() {
@@ -360,7 +361,7 @@ public class Main {
 
         boolean retval;
         if(installManifest.containsKey(moduleName) && installManifest.get(moduleName).totalRefExcept("commandline")  > 0 ) {
-            emit("\t" + moduleName + " is still needed " + /*installManifest.get(moduleName).refCount + */ " \n");
+            emit("\t" + moduleName + " is still needed " + (isDebug ?  installManifest.get(moduleName).refCount : " ") +  " \n");
             retval = false;
         }
         else {
@@ -396,7 +397,9 @@ public class Main {
         dependencyInstance.addRefFrom(agent);
         
         dependencyInstance.installAgent = agent;
-        //emit("\tDEBUG: " + module + " " +  dependencyInstance.refCount + "\n");
+        if(isDebug) {
+        	emit("\tDEBUG: " + module + " " +  dependencyInstance.refCount + "\n");
+        }
         installManifest.put(module, dependencyInstance);
 
         for(Dependency d: dependency.dependencyList) {
