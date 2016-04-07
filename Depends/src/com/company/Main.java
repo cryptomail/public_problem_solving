@@ -18,6 +18,18 @@ public class Main {
         }
     };
 
+    public class DependencyInstance  {
+
+        protected int refCount;
+        protected String installAgent;
+        protected Dependency dependency;
+        public DependencyInstance(Dependency dependency) {
+            this.dependency = dependency;
+            this.installAgent = null;
+            refCount = 0;
+
+        }
+    };
     public final static String COMMAND_END = "END";
     public final static String COMMAND_DEPEND = "DEPEND";
     public final static String COMMAND_INSTALL = "INSTALL";
@@ -25,10 +37,12 @@ public class Main {
     public final static String COMMAND_LIST = "LIST";
 
     protected HashMap<String,Dependency> dependencyHashMap;
+    protected HashMap<String,DependencyInstance> installManifest;
 
 
     public Main() {
         dependencyHashMap = new HashMap<>();
+        installManifest = new HashMap<>();
     }
     protected boolean isValidLine(String line) {
         if(line == null) {
@@ -160,6 +174,61 @@ public class Main {
         emit("\n");
         return 0;
     }
+
+    protected boolean installModule(String module, String agent) {
+        Dependency dependency = dependencyHashMap.get(module);
+        DependencyInstance dependencyInstance = installManifest.get(module);
+
+        boolean reallyDidIt = false;
+        if(dependency == null) {
+            dependency = new Dependency(module);
+        }
+        if(dependencyInstance == null) {
+            dependencyInstance = new DependencyInstance(dependency);
+            reallyDidIt = true;
+
+        }
+        dependencyInstance.refCount++;
+        dependencyInstance.installAgent = agent;
+        installManifest.put(module, dependencyInstance);
+
+        for(Dependency d: dependency.dependencyList) {
+
+            installModule(d.moduleName, agent);
+
+        }
+        if(reallyDidIt) {
+            emit("\tInstalling " + module + "\n");
+        }
+
+
+        return reallyDidIt;
+    }
+    protected  int processInstall(String module, String agent) {
+        if(installManifest.containsKey(module)) {
+
+            /*
+            Question: if agent is commandline, does this replace with a force? easy out for now.
+             */
+            return 0;
+        }
+        emit("INSTALL " + module + "\n");
+        installModule(module, agent);
+        return 0;
+    }
+    protected int processLineInstallLine(String line, String agent) {
+        StringTokenizer st = new StringTokenizer(line);
+
+        st.nextElement(); //EAT DEPEND :)
+        String moduleName = (String)st.nextElement();
+
+        if(moduleName == null || moduleName.length() == 0) {
+            return -1;
+        }
+
+        return processInstall(moduleName,agent);
+
+    }
     protected  void processLine(String line) {
         if(line == null || line.length() == 0) {
             Assert.check(false);
@@ -178,7 +247,7 @@ public class Main {
         if(line.startsWith((COMMAND_DEPEND))) {
             processDependLine(line);
         } else if(line.startsWith(COMMAND_INSTALL)) {
-            //processLineInstallLine(line);
+            processLineInstallLine(line,"commandline");
         } else if(line.startsWith(COMMAND_LIST)) {
             //processListLine(line);
         }
@@ -307,6 +376,18 @@ public class Main {
         int retval = m.run(inputStream);
         Assert.check(retval == 0);
     }
+    static public void testDependSixLine() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("DEPEND TELNET TCPIP NETCARD\nDEPEND TCPIP NETCARD\nDEPEND NETCARD TCPIP\nDEPEND DNS TCPIP NETCARD\nINSTALL NETCARD\nINSTALL TELNET\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
     /*
     just end success. nonce run.
      */
@@ -327,7 +408,7 @@ public class Main {
 	// write your code here
 
 
-        testDependFourLine();
+        testDependSixLine();
 
 
     }
