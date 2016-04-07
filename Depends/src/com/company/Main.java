@@ -102,12 +102,14 @@ public class Main {
             dependencyHashMap.put(moduleName,dependency);
         }
 
-        // BUG: THIS PREMATURELY EMITS MAYBE
         emit("DEPEND " + moduleName + " ");
         return 0;
 
     }
 
+    /*
+    In order, non recursive implmentation of find.  Because I like it!
+     */
     protected  boolean findDescendent(String rootModule, String target) {
         if(!dependencyHashMap.containsKey((rootModule))) {
             return false;
@@ -555,7 +557,7 @@ public class Main {
     public static void main(String[] args) {
 	// write your code here
 
-        test00();
+        /*test00();
         test0();
         test1();
         testDependTwoLine();
@@ -565,7 +567,7 @@ public class Main {
         testDependSevenLine();
         testDependEightLine();
         testNegativeUnknowncommand();
-        testListOnly();
+        testListOnly();*/
 
         /*
         I think this is the final test
