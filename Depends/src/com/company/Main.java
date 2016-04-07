@@ -204,6 +204,7 @@ public class Main {
         }
         DependencyInstance dependencyInstance = installManifest.get(moduleName);
 
+
         if(dependencyInstance.refCount > 1) {
             return false;
         }
@@ -211,11 +212,14 @@ public class Main {
         boolean removed = true;
         for(Dependency d : dependencyInstance.dependency.dependencyList) {
             DependencyInstance dependencyInstance1 = installManifest.get(d.moduleName);
-
+            if(dependencyInstance1 == null) {
+                continue;
+            }
             dependencyInstance1.refCount--;
             if(dependencyInstance1.refCount == 0) {
                 emit("\tremoving " + d.moduleName + "\n" );
                 installManifest.remove(d.moduleName);
+
             }
         }
 
@@ -247,6 +251,7 @@ public class Main {
         }
         else {
             emit("\tremoving " + moduleName + "\n");
+            installManifest.remove(moduleName);
         }
         return retval;
     }
@@ -372,6 +377,7 @@ public class Main {
             }
             catch (Exception e) {
                 bStop = true;
+                e.printStackTrace();
                 bErrorState = true;
             }
 
