@@ -536,7 +536,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependTwoLine() {
         Main m = new Main();
@@ -548,7 +548,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependThreeLine() {
         Main m = new Main();
@@ -560,7 +560,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependFourLine() {
         Main m = new Main();
@@ -572,7 +572,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependSixLine() {
         Main m = new Main();
@@ -584,7 +584,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependSevenLine() {
         Main m = new Main();
@@ -596,7 +596,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void testDependEightLine() {
         Main m = new Main();
@@ -608,7 +608,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     /*
     just end success. nonce run.
@@ -623,7 +623,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == -1);
+        assert(retval == -1);
     }
     /*
    just end success. nonce run.
@@ -638,7 +638,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void fulltest_positive() {
         Main m = new Main();
@@ -650,7 +650,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
     static public void fulltest_positive2() {
         Main m = new Main();
@@ -662,7 +662,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-        //Assert.check(retval == 0);
+        assert(retval == 0);
     }
 
     static public void testListOnly() {
@@ -695,11 +695,10 @@ public class Main {
         /*
         I think this is the final test
          */
-        //fulltest_positive();
-        fulltest_positive2();
+        fulltest_positive();
+        //fulltest_positive2();
 
 
 
     }
 }
-
