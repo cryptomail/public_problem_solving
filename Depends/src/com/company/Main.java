@@ -664,8 +664,9 @@ public class Main {
         int retval = m.run(inputStream);
         assert(retval == 0);
     }
-    static public void fulltest_positive() {
+    static public void fulltest_positive(boolean isDebug) {
         Main m = new Main();
+        m.isDebug = isDebug;
         StringBuffer sbf = new StringBuffer(m.theInput);
         byte[] bytes = sbf.toString().getBytes();
         /*
@@ -719,7 +720,8 @@ public class Main {
         /*
         I think this is the final test
          */
-        fulltest_positive();
+    	
+        fulltest_positive(args.length > 0);
         //fulltest_positive2();
 
 
