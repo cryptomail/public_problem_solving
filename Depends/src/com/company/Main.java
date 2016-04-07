@@ -534,7 +534,7 @@ public class Main {
         InputStream inputStream = new ByteArrayInputStream(bytes);
 
         int retval = m.run(inputStream);
-       
+       assert(retval == -1);
     }
     /*
     No input ultra jerk input
@@ -547,7 +547,7 @@ public class Main {
          */
 
         int retval = m.run(null);
-       
+        assert(retval == -1);
     }
 
     static public void testDependOneLine() {
