@@ -8,6 +8,27 @@ import java.util.*;
 
 public class Main {
 
+    String theInput = "DEPEND TELNET TCPIP NETCARD\n"+
+            "DEPEND TCPIP NETCARD\n"+
+            "DEPEND DNS TCPIP NETCARD\n"+
+            "DEPEND BROWSER TCPIP HTML\n"+
+            "INSTALL NETCARD\n"+
+            "INSTALL TELNET\n"+
+            "INSTALL foo\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL BROWSER\n"+
+            "INSTALL DNS\n"+
+            "LIST\n"+
+            "REMOVE TELNET\n"+
+            "REMOVE NETCARD\n"+
+            "REMOVE DNS\n"+
+            "REMOVE NETCARD\n"+
+            "INSTALL NETCARD\n"+
+            "REMOVE TCPIP\n"+
+            "REMOVE BROWSER\n"+
+            "REMOVE TCPIP\n"+
+            "END";
+
     public class Dependency {
         protected String moduleName;
         protected  List<Dependency> dependencyList;
@@ -73,7 +94,7 @@ public class Main {
     }
     protected  int processDependencyModule(String moduleName) {
 
-        if(moduleName == null || moduleName.length() == 0 ) {
+        if(moduleName == null || moduleName.length() == 0) {
             return -1;
         }
         if(!dependencyHashMap.containsKey(moduleName)) {
@@ -174,7 +195,59 @@ public class Main {
         emit("\n");
         return 0;
     }
+    protected  boolean removeModule(String moduleName) {
 
+        if(!installManifest.containsKey(moduleName)) {
+            return false;
+        }
+        DependencyInstance dependencyInstance = installManifest.get(moduleName);
+
+        if(dependencyInstance.refCount > 1) {
+            return false;
+        }
+
+        boolean removed = true;
+        for(Dependency d : dependencyInstance.dependency.dependencyList) {
+            DependencyInstance dependencyInstance1 = installManifest.get(d.moduleName);
+
+            dependencyInstance1.refCount--;
+            if(dependencyInstance1.refCount == 0) {
+                emit("\tremoving " + d.moduleName + "\n" );
+                installManifest.remove(d.moduleName);
+            }
+        }
+
+
+        return removed;
+    }
+    protected  boolean processRemoveLine(String line) {
+
+        StringTokenizer st = new StringTokenizer(line);
+
+        st.nextElement(); //EAT REMOVE :)
+        String moduleName = (String)st.nextElement();
+
+        if(moduleName == null || moduleName.length() == 0) {
+            return false;
+        }
+
+        emit("REMOVE " + moduleName + "\n");
+        if(!installManifest.containsKey(moduleName)) {
+
+            emit("\t" + moduleName + " is not installed\n");
+            return false;
+        }
+
+        boolean retval =  removeModule(moduleName);
+
+        if(retval == false) {
+            emit("\t" + moduleName + " is still needed\n");
+        }
+        else {
+            emit("\tremoving " + moduleName + "\n");
+        }
+        return retval;
+    }
     protected boolean installModule(String module, String agent) {
         Dependency dependency = dependencyHashMap.get(module);
         DependencyInstance dependencyInstance = installManifest.get(module);
@@ -205,14 +278,16 @@ public class Main {
         return reallyDidIt;
     }
     protected  int processInstall(String module, String agent) {
+        emit("INSTALL " + module + "\n");
         if(installManifest.containsKey(module)) {
 
             /*
             Question: if agent is commandline, does this replace with a force? easy out for now.
              */
+            emit("\t" + module + " is already installed \n");
             return 0;
         }
-        emit("INSTALL " + module + "\n");
+
         installModule(module, agent);
         return 0;
     }
@@ -228,6 +303,12 @@ public class Main {
 
         return processInstall(moduleName,agent);
 
+    }
+    protected void processListLine(String line) {
+        emit("LIST\n");
+        for(DependencyInstance dependencyInstance : installManifest.values()) {
+            emit("\t" + dependencyInstance.dependency.moduleName + "\n");
+        }
     }
     protected  void processLine(String line) {
         if(line == null || line.length() == 0) {
@@ -249,7 +330,10 @@ public class Main {
         } else if(line.startsWith(COMMAND_INSTALL)) {
             processLineInstallLine(line,"commandline");
         } else if(line.startsWith(COMMAND_LIST)) {
-            //processListLine(line);
+            processListLine(line);
+        }
+        else if(line.startsWith(COMMAND_REMOVE)) {
+            processRemoveLine(line);
         }
 
 
@@ -278,6 +362,7 @@ public class Main {
                 }
                 if(isStopLine(line)) {
                     bStop = true;
+                    emit("END\n");
                     break;
                 }
                 processLine(line);
@@ -388,6 +473,30 @@ public class Main {
         int retval = m.run(inputStream);
         Assert.check(retval == 0);
     }
+    static public void testDependSevenLine() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("DEPEND TELNET TCPIP NETCARD\nDEPEND TCPIP NETCARD\nDEPEND NETCARD TCPIP\nDEPEND DNS TCPIP NETCARD\nINSTALL NETCARD\nINSTALL TELNET\nINSTALL foo\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
+    static public void testDependEightLine() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("DEPEND TELNET TCPIP NETCARD\nDEPEND TCPIP NETCARD\nDEPEND NETCARD TCPIP\nDEPEND DNS TCPIP NETCARD\nINSTALL NETCARD\nINSTALL TELNET\nINSTALL FOO\nREMOVE NETCARD\nREMOVE TELNET\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
     /*
     just end success. nonce run.
      */
@@ -403,12 +512,24 @@ public class Main {
         int retval = m.run(inputStream);
         Assert.check(retval == 0);
     }
+    static public void fulltest() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer(m.theInput);
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
 
     public static void main(String[] args) {
 	// write your code here
 
 
-        testDependSixLine();
+        fulltest();
 
 
     }
