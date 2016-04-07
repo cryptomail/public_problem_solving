@@ -377,7 +377,7 @@ public class Main {
 
         if(bErrorState)
         {
-            System.err.println("ABNORMAL EXIT DID NOT MEET END");
+            //System.err.println("ABNORMAL EXIT DID NOT MEET END");
             return -1;
         }
 
@@ -500,6 +500,21 @@ public class Main {
     /*
     just end success. nonce run.
      */
+    static public void testNegativeUnknowncommand() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("LIST\nFOOBAR SOMETHING\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == -1);
+    }
+    /*
+   just end success. nonce run.
+    */
     static public void test1() {
         Main m = new Main();
         StringBuffer sbf = new StringBuffer("END");
@@ -512,7 +527,7 @@ public class Main {
         int retval = m.run(inputStream);
         Assert.check(retval == 0);
     }
-    static public void fulltest() {
+    static public void fulltest_positive() {
         Main m = new Main();
         StringBuffer sbf = new StringBuffer(m.theInput);
         byte[] bytes = sbf.toString().getBytes();
@@ -525,11 +540,38 @@ public class Main {
         Assert.check(retval == 0);
     }
 
+    static public void testListOnly() {
+        Main m = new Main();
+        StringBuffer sbf = new StringBuffer("LIST\nEND");
+        byte[] bytes = sbf.toString().getBytes();
+        /*
+         * Get ByteArrayInputStream from byte array.
+         */
+        InputStream inputStream = new ByteArrayInputStream(bytes);
+
+        int retval = m.run(inputStream);
+        Assert.check(retval == 0);
+    }
     public static void main(String[] args) {
 	// write your code here
 
+        test00();
+        test0();
+        test1();
+        testDependTwoLine();
+        testDependThreeLine();
+        testDependFourLine();
+        testDependSixLine();
+        testDependSevenLine();
+        testDependEightLine();
+        testNegativeUnknowncommand();
+        testListOnly();
 
-        fulltest();
+        /*
+        I think this is the final test
+         */
+        fulltest_positive();
+
 
 
     }
