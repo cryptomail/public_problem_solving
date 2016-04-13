@@ -259,6 +259,37 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
+		it('Negative: Empty file', function(done) {
+			
+			var fnameBase = 'bunk';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					console.log(data);
+					assert(1==2,'How did this happen?  Why can we upload a file with zero content auth?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		console.log(e);
+		  		assert(!e.ok && e.error === util.FilesErrorStates.NOT_AUTHED);
+		  		done();
+		  	});
+
+		});
 
 	});
 

@@ -13,10 +13,12 @@ $ mocha
 ####Todo List:
 
 ####Files.Upload
-1. ~~Simple positive test 04/12/2016~~
+1. ~~Simple positive test ~~04/12/2016
 2. Negative files.upload
-  * Invalid auth
-  
+  * ~~Invalid auth~~04/13/2016
+  * ~~No auth~~ 04/13/2016
+  * ~~No content~~ 04/13/2016
+
 3. Super evil tests
   * unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: 
   ```javascript

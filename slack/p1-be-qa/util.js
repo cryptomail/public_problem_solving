@@ -48,6 +48,7 @@ module.exports = function(baseURL, secretToken) {
       'INVALID_POST_TYPE' : 'invalid_post_type',
       'MISSING_POST_TYPE' : 'missing_post_type',
       'REQUEST_TIMEOUT' : 'request_timeout',
+      'NO_FILE' : 'no_file',
     },
 
     /*
