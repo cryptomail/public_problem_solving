@@ -113,6 +113,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
 			
+					assert(data.id != null,'data id defined');
 					/*
 					Record what we wrote for later cleanup
 					*/
