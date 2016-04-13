@@ -117,6 +117,10 @@ Never store keys in source code!  Only in configuration where access can/should 
 					Record what we wrote for later cleanup
 					*/
 					filesUploaded[data.id] = data;
+
+					/*
+					TODO: this is a little -funroll-loops here :\
+					*/
 					assert(data.thumb_64 != null,'thumb_64 defined');
 					assert(data.thumb_80 != null,'thumb_80 defined');
 					assert(data.thumb_360 != null,'thumb_360 defined');
