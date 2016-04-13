@@ -58,19 +58,21 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
 
-        var URL = self.baseURL + object + '.' + command + '?' + 'token=' + encodeURIComponent(self.secretToken);
+        
+        var commandPart = self.baseURL + object + '.' + command;
+        var URL = commandPart + '?' + 'token=' + encodeURIComponent(self.secretToken);
 
         /*
         Snap the main request
         */
         request.get(URL,function (err, res, body) {
           if(err) {
-            reject(err);
+            reject('Something bad happened at POST URL ' + commandPart);
             return;
           }
           if(res.statusCode !== 200) {
           
-            reject('Something bad happened at URL ' + URL);
+            reject('HTTP response: Something bad happened at GET URL ' + commandPart); // Do not log the token info :)
             return;
           }
                 
@@ -83,6 +85,43 @@ module.exports = function(baseURL, secretToken) {
 
       return p;
       
+    },
+
+    issueSimplePOSTRequest: function(object, command, formData) {
+      var self = this;
+      var p = new Promise(function(resolve,reject) {
+
+        var commandPart = self.baseURL + object + '.' + command;
+        var URL = commandPart; //For consistency upstairs on GET.
+
+        /*
+        Snap the main request
+        */
+        formData.token = self.secretToken;
+
+        request.post(URL,{formData:formData}, function (err, res, body) {
+          if(err) {
+            reject('Something bad happened at POST URL ' + commandPart);
+            return;
+          }
+          if(res.statusCode !== 200) {
+          
+            reject('HTTP response: Something bad happened at POST URL ' + commandPart); // Do not log the token info :)
+            return;
+          }
+                
+          var res = JSON.parse(body);
+
+          if(!res || !res.ok) {
+            reject('body not ok in  issueSimplePOSTRequest');
+            return;
+          }
+          resolve(res.file);
+
+        });
+      });
+
+      return p;
       
     },
 

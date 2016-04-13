@@ -4,9 +4,15 @@ Joshua Teitelbaum 4/12/2016
 Testing the Slack FILE API
 */
 
+/*
+Main musical background for creation of this library:
+https://www.youtube.com/watch?v=vSbQMxrt93o&nohtml5=False
+*/
+
 var assert = require('assert');
 var Promise = require('promise');
 var request = require('request');
+var fs = require('fs');
 
 /*
 Secret key never stored in source code, and only is accessible through configuration files not in any RCS
@@ -20,6 +26,10 @@ Switchable environment qa.slack.com/api, devint.slack.com/api, or default slack.
 var baseURL = process.env.SLACK_API_BASEURL;
 
 
+/*
+Global storage area of (responses) from files we uploaded
+*/
+var filesUploaded = {};
 
 /*
 If the base URL is not set assume we're testing PROD!
@@ -28,6 +38,7 @@ If the base URL is not set assume we're testing PROD!
 if(!baseURL) {
 	baseURL = "https://slack.com/api/";
 }
+
 var util = require('./util.js')(baseURL, secretToken);
 
 
@@ -51,7 +62,6 @@ Never store keys in source code!  Only in configuration where access can/should 
 
 		it('Can load channels', function(done) {
 			util.getChannels().then( function success(channels) {
-				
 				assert(channels);
 				channels =
 				done();
@@ -62,9 +72,8 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
-		it('Can load find general channel', function(done) {
+		it('Can load / find general channel', function(done) {
 			util.getChannel('general').then( function success(channel) {
-				
 				assert(channel);
 				done();
 			},
@@ -74,6 +83,36 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
+
 	});
-	
+	describe('Begin testing the files api!', function() {
+		this.timeout(10000);
+		it('Positive: Can upload a file', function(done) {
+			
+			var formData = {
+						
+							
+							file: {
+								value:  fs.createReadStream('kinderegg.png'),
+								options: {
+									filename: 'kinderegg.png',
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+			
+					filesUploaded[data.id] = data;
+				  	
+				    done();
+		  		},
+		  	function error(e) {
+		  		assert(1==2,"Returned something other than 500 :)");
+		  		done();
+		  	});
+
+		});
+	});
 });
