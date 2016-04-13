@@ -3,7 +3,7 @@
 
 ##This test library requires Mocha.  Mocha installation is very easy and can be found here: https://mochajs.org/#installation
 
-###For the impatient:
+###For the impatient, download source into current working dir:
 ```bash
 $ npm install -g mocha
 $ npm install
