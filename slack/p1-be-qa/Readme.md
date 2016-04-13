@@ -1,5 +1,15 @@
 #Slack API Testing
 
+
+##This test library requires Mocha.  Mocha installation is very easy and can be found here: https://mochajs.org/#installation
+
+###For the impatient:
+```bash
+$ npm install -g mocha
+$ npm install
+$ mocha
+```
+
 ####Todo:
 
 ##Files.Upload
