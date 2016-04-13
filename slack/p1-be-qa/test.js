@@ -232,6 +232,41 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
+
+		it('Positive: unset filetype or LIED to DOT FILE resolves to correct filetype', function(done) {
+			
+			var fnameBase = 'really_a_pdf';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					console.log(data);
+					filesUploaded[data.id] = data;
+					//Server performed correct magic on file!
+					//Would be interesting to know what binary library is being used because of security risks there :) ... or rather >:]
+					assert(data.filetype && data.filetype.toLowerCase() === 'pdf')
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		util.errorlog(e);
+		  		assert(false,'got error ' + e);
+		  		done();
+		  	});
+
+		});
+
 		it('Negative: Invalid Auth', function(done) {
 			
 			var fnameBase = 'kinderegg';

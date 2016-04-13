@@ -13,11 +13,15 @@ $ mocha
 ####Todo List:
 
 ####Files.Upload
-1. ~~Simple positive test ~~04/12/2016
+1. Positive tests 
+  ** ~~Simple positive test~~ 04/12/2016 
+  ** ~~Simple unknown field in payload test: muppets in form!~~ 04/12/2016 
+  ** ~~unknown content resolves to correct content~~ 04/13/2016 Real PDF upload respresented as kermitthefrog content type.
+  ** ~~unset file type resolves to correct content~~ 04/13/2016 
 2. Negative files.upload
   * ~~Invalid auth~~04/13/2016
-  * ~~No auth~~ 04/13/2016
-  * ~~No content~~ 04/13/2016 NOT DOCUMENTED ON SLACK!!! Filed under "OTHER"
+  * ~~No auth provided~~ 04/13/2016
+  * ~~No content, empty file~~ 04/13/2016 NOT DOCUMENTED ON SLACK!!! Filed under "OTHER" in documentation easy out.
   * ~~misnomed content~~ 04/13/2016 Real PDF upload respresented as PNG
 
 3. Super evil tests
