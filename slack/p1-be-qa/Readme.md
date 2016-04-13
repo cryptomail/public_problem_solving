@@ -10,19 +10,19 @@ $ npm install
 $ mocha
 ```
 
-####Todo:
+####Todo List:
 
-##Files.Upload
+####Files.Upload
 1. ~~Simple positive test 04/12/2016~~
 2. Negative files.upload
 3.  Super evil tests
 
-##Files.list
+####Files.list
 1. Simple positive test
 2. Negative files.upload
 3. Super evil tests
 
-##Files.delete
+###Files.delete
 1. Simple positive test
 2. Negative files.upload
 3. Super evil tests
