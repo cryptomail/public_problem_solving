@@ -284,8 +284,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 				    
 		  		},
 		  	function error(e) {
-		  		console.log(e);
-		  		assert(!e.ok && e.error === util.FilesErrorStates.NOT_AUTHED);
+		  		assert(!e.ok && e.error === util.FilesErrorStates.NO_FILE);
 		  		done();
 		  	});
 
