@@ -17,7 +17,8 @@ $ mocha
 2. Negative files.upload
   * ~~Invalid auth~~04/13/2016
   * ~~No auth~~ 04/13/2016
-  * ~~No content~~ 04/13/2016
+  * ~~No content~~ 04/13/2016 NOT DOCUMENTED ON SLACK!!! Filed under "OTHER"
+  * ~~misnomed content~~ 04/13/2016 Real PDF upload respresented as PNG
 
 3. Super evil tests
   * unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: 
