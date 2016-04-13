@@ -85,15 +85,14 @@ Never store keys in source code!  Only in configuration where access can/should 
 		});
 
 	});
+
 	describe('Begin testing the files api!', function() {
-		this.timeout(10000);
+		this.timeout(5000);
 		it('Positive: Can upload a file', function(done) {
 			
 			var formData = {
-						
-							
 							file: {
-								value:  fs.createReadStream('kinderegg.png'),
+								value:  fs.createReadStream('data/kinderegg.png'),
 								options: {
 									filename: 'kinderegg.png',
 									contentType: 'image/png'
@@ -105,7 +104,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 				function success(data) {
 			
 					filesUploaded[data.id] = data;
-				  	
+			
 				    done();
 		  		},
 		  	function error(e) {
