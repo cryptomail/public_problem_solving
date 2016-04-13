@@ -201,6 +201,18 @@ module.exports = function(baseURL, secretToken) {
         
       });
       return p;
+    },
+
+    blabber: function(something, ntimes) {
+      var n = ntimes;
+
+      var output = '';
+      while(n > 0) {
+        output += something;
+        n--;
+      }
+
+      return output;
     }
   };
 };

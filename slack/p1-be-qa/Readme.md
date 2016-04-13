@@ -19,6 +19,7 @@ $ mocha
   ** ~~unknown content resolves to correct content~~ 04/13/2016 Real PDF upload respresented as kermitthefrog content type.
   ** ~~unset file type resolves to correct content~~ 04/13/2016 
   ** ~~send to channel~~ 04/13/2016 
+  ** ~~channels: same channel twice~~ 04/13/2016 
 2. Negative files.upload
   * ~~Invalid auth~~04/13/2016
   * ~~No auth provided~~ 04/13/2016
@@ -42,9 +43,9 @@ $ mocha
 ```
   * bust a field limit
   * misnomed file... put a PDF into a PNG
-  * channels with all kinds of crap in it 1,000 commas
+  * ~~channels with all kinds of crap in it 100,000 commas~~ 04/13/2016
   * channels: 1 MB channel name followed by a single channel
-  * channels: same channel twice
+  
 
 ####Files.list
 1. Simple positive test
