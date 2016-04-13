@@ -31,10 +31,24 @@ function lineNumberAndFile() {
 Main module here
 */
 module.exports = function(baseURL, secretToken) {
+ 
+
   return {
   	secretToken: secretToken,
     baseURL: baseURL,
     channels: undefined,
+    FilesErrorStates: {
+      'NOT_AUTHED' : 'not_authed',
+      'INVALID_CHANNEL' : 'invalid_channel',
+      'INVALID_AUTH' : 'invalid_auth',
+      'ACCOUNT_INACTIVE' : 'account_inactive',
+      'INVALID_ARRAY_ARG' : 'invalid_array_arg',
+      'INVALID_CHARSET' : 'invalid_charset',
+      'INVALID_FORM_DATA' : 'invalid_form_data',
+      'INVALID_POST_TYPE' : 'invalid_post_type',
+      'MISSING_POST_TYPE' : 'missing_post_type',
+      'REQUEST_TIMEOUT' : 'request_timeout',
+    },
 
     /*
       Use the console but emit error / warn / debug candy
@@ -101,8 +115,7 @@ module.exports = function(baseURL, secretToken) {
         /*
         Snap the main request
         */
-        formData.token = self.secretToken;
-
+        
         request.post(URL,{formData:formData}, function (err, res, body) {
           if(err) {
             reject('Something bad happened at POST URL ' + commandPart);
@@ -117,7 +130,7 @@ module.exports = function(baseURL, secretToken) {
           var res = JSON.parse(body);
 
           if(!res || !res.ok) {
-            reject('body not ok in  issueSimplePOSTRequest');
+            reject(res);
             return;
           }
           resolve(res.file);

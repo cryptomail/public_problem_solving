@@ -15,8 +15,12 @@ $ mocha
 ####Files.Upload
 1. ~~Simple positive test 04/12/2016~~
 2. Negative files.upload
+  * Invalid auth
+  
 3. Super evil tests
-..* unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: ```var formData = {
+  * unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: 
+  ```javascript
+  	var formData = {
 							muppets: 'animal, kermit, miss piggy',
 							file: {
 								value:  fs.createReadStream(fnamePath),
@@ -25,8 +29,10 @@ $ mocha
 									contentType: 'image/png'
 								}
 							}	
-						};```
-..* bust a field limit
+						};
+```
+  * bust a field limit
+  * misnomed file... put a PDF into a PNG
 
 ####Files.list
 1. Simple positive test

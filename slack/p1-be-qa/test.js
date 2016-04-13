@@ -94,13 +94,14 @@ Never store keys in source code!  Only in configuration where access can/should 
 	});
 
 	describe('Begin testing the files api!', function() {
-		this.timeout(10000);
+		this.timeout(20000);
 		it('Positive: Can upload a file', function(done) {
 			
 			var fnameBase = 'kinderegg';
 			var fname = fnameBase + '.png';
 			var fnamePath = 'data' + '/' + fname;
 			var formData = {
+							token: secretToken,
 							file: {
 								value:  fs.createReadStream(fnamePath),
 								options: {
@@ -151,6 +152,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 			var fname = fnameBase + '.png';
 			var fnamePath = 'data' + '/' + fname;
 			var formData = {
+							token: secretToken,
 							muppets: 'animal, kermit, miss piggy',
 							file: {
 								value:  fs.createReadStream(fnamePath),
@@ -160,7 +162,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 								}
 							}	
 						};
-						
+			
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
 			
@@ -194,8 +196,70 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  		assert(1==2,"Returned something other than 500 :)");
 		  		done();
 		  	});
+			
+		});
+
+		it('Negative: Invalid Auth', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							token: 'MissPiggy' + secretToken + 'Kermit',
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+					
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					console.log(data);
+					assert(1==2,'How did this happen?  Why can we upload a file with invalid auth?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		assert(!e.ok && e.error === util.FilesErrorStates.INVALID_AUTH);
+		  		done();
+		  	});
 
 		});
+		it('Negative: No Auth Provided', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(1==2,'How did this happen?  Why can we upload a file with invalid auth?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		
+		  		assert(!e.ok && e.error === util.FilesErrorStates.NOT_AUTHED);
+		  		done();
+		  	});
+
+		});
+
 	});
 
 });
