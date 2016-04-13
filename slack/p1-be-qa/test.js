@@ -41,6 +41,13 @@ if(!baseURL) {
 
 var util = require('./util.js')(baseURL, secretToken);
 
+/*
+Oh node, y u so silly and not include?
+*/
+
+String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+};
 
 describe('Test suite to test Slack 3 API Endpoints: files.upload, files.list, files.delete', function() {
 
@@ -87,14 +94,17 @@ Never store keys in source code!  Only in configuration where access can/should 
 	});
 
 	describe('Begin testing the files api!', function() {
-		this.timeout(5000);
+		this.timeout(10000);
 		it('Positive: Can upload a file', function(done) {
 			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
 			var formData = {
 							file: {
-								value:  fs.createReadStream('data/kinderegg.png'),
+								value:  fs.createReadStream(fnamePath),
 								options: {
-									filename: 'kinderegg.png',
+									filename: fname,
 									contentType: 'image/png'
 								}
 							}	
@@ -103,9 +113,26 @@ Never store keys in source code!  Only in configuration where access can/should 
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
 			
+					/*
+					Record what we wrote for later cleanup
+					*/
 					filesUploaded[data.id] = data;
-			
-				    done();
+					assert(data.thumb_64 != null,'thumb_64 defined');
+					assert(data.thumb_80 != null,'thumb_80 defined');
+					assert(data.thumb_360 != null,'thumb_360 defined');
+					assert(data.thumb_160 != null,'thumb_160 defined');
+					assert(data.channels && data.channels.length == 0);
+
+					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
+					assert(data.thumb_64.endsWith(fname64));
+					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
+					assert(data.thumb_80.endsWith(fname80));
+					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
+					assert(data.thumb_360.endsWith(fname360));
+					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
+					assert(data.thumb_160.endsWith(fname160));
+					done();
+				    
 		  		},
 		  	function error(e) {
 		  		assert(1==2,"Returned something other than 500 :)");

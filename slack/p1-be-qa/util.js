@@ -49,6 +49,10 @@ module.exports = function(baseURL, secretToken) {
       console.log(d, '*****DEBUG' + lineNumberAndFile(), arguments)
     },
 
+  constructThumbFileNamePostfix: function(fname, separator, thumbsize, ftype) {
+    var retval = fname + separator + thumbsize + '.' + ftype;
+    return retval.toLowerCase();
+  },
     /*
     Issue a simple GET request on slack api: Object.Command
     Assumes baseURL is here, along with the secret token.
