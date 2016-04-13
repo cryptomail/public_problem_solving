@@ -23,6 +23,7 @@ $ mocha
   * ~~No auth provided~~ 04/13/2016
   * ~~No content, empty file~~ 04/13/2016 NOT DOCUMENTED ON SLACK!!! Filed under "OTHER" in documentation easy out.
   * ~~misnomed content~~ 04/13/2016 Real PDF upload respresented as PNG
+  * ~~send to invalid channel~~ 04/13/2016 
 
 3. Super evil tests
   * unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: 
@@ -40,6 +41,9 @@ $ mocha
 ```
   * bust a field limit
   * misnomed file... put a PDF into a PNG
+  * channels with all kinds of crap in it 1,000 commas
+  * channels: 1 MB channel name followed by a single channel
+  * channels: same channel twice
 
 ####Files.list
 1. Simple positive test

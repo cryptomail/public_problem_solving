@@ -217,7 +217,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 						
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
-					console.log(data);
+					
 					filesUploaded[data.id] = data;
 					//Server performed correct magic on file!
 					//Would be interesting to know what binary library is being used because of security risks there :) ... or rather >:]
@@ -251,7 +251,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 						
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
-					console.log(data);
+					
 					filesUploaded[data.id] = data;
 					//Server performed correct magic on file!
 					//Would be interesting to know what binary library is being used because of security risks there :) ... or rather >:]
@@ -285,7 +285,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 					
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
-					console.log(data);
+					
 					assert(1==2,'How did this happen?  Why can we upload a file with invalid auth?');
 					
 					done();
@@ -345,7 +345,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 						
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
-					console.log(data);
+					
 					assert(1==2,'How did this happen?  Why can we upload a file with zero content auth?');
 					
 					done();
@@ -353,6 +353,38 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  		},
 		  	function error(e) {
 		  		assert(!e.ok && e.error === util.FilesErrorStates.NO_FILE);
+		  		done();
+		  	});
+
+		});
+		it('Negative: Send to invalid channel', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							channels: 'dr_bunson_honeydew',
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(1==2,'How did this happen?  Why can we upload a file with zero content auth?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		
+		  		assert(!e.ok && e.error === util.FilesErrorStates.INVALID_CHANNEL);
 		  		done();
 		  	});
 
