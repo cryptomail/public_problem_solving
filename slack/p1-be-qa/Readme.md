@@ -57,12 +57,17 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~channels: Send a lot of channels of same name~~ 4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
   
 
-####Files.list IN PROGRESS
-1. Simple positive test
-2. Negative files.upload
+####Files.list 
+1. Simple positive tests
+  * ~~Can get a count of all the images~~ 04/13/2016: Gets first file, looks at paging.count
+  * ~~Can get a listing of all the images~~ 04/13/2016: Gets count from step above, and gets all files
+
+2. Negative files.list
 3. Super evil tests
 
-####Files.delete IN PROGRESS
+####Files.delete 
 1. Simple positive test
+  * ~~Deletes first file uploaded in session~~ 04/13/2016
+  
 2. Negative files.upload
 3. Super evil tests
