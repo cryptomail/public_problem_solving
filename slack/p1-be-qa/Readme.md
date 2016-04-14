@@ -11,7 +11,7 @@ $ export SLACK_SECRET_TOKEN=xxxx-xxxxxxxxx-xxxx # I will never EVER put this in 
 $ mocha
 ```
 
-![Black Box Slack API Testing](https://www.dropbox.com/s/5o7c1dzbd9pu55p/Screenshot%202016-04-14%2008.57.28.png?dl=0"Mocha output")
+![alt text](https://www.dropbox.com/s/5o7c1dzbd9pu55p/Screenshot%202016-04-14%2008.57.28.png?dl=0 "Mocha output")
 
 
 
