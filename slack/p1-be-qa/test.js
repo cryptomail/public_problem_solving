@@ -95,6 +95,12 @@ Never store keys in source code!  Only in configuration where access can/should 
 
 	describe('Begin testing the files api!', function() {
 		this.timeout(40000);
+		it('Initializes for idempotency', function(done) {
+			done();
+		},
+		function error(e) {
+
+		});
 		it('Positive: Can upload a file', function(done) {
 			
 			var fnameBase = 'kinderegg';
@@ -589,6 +595,95 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	function error(e) {
 		  		
 		  		assert(!e.ok && e.error === util.FilesErrorStates.INVALID_CHANNEL);
+		  		done();
+		  	});
+
+		});
+		it('Evil: Send a big gulp file name, and get s3 error.\007 I would not do this.', function(done) {
+			
+			var fnameBase = util.blabber('kinderegg',1000) + '.png';
+			var fname = 'kinderegg' + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							filename: fnameBase,
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(1==2,'How did this happen?  Why can we upload a file to a channel that doesnt exist?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		assert(!e.ok && e.error === 's3_failure');
+		  		done();
+		  	});
+
+		});
+
+		it('Evil: Send a big gulp title', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							filename: fnameBase,
+							title: util.blabber('shmoo',100000),
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(data.id != null,'data id defined');
+					/*
+					Record what we wrote for later cleanup
+					*/
+					filesUploaded[data.id] = data;
+
+					/*
+					TODO: this is a little -funroll-loops here :\
+					*/
+					assert(data.thumb_64 != null,'thumb_64 defined');
+					assert(data.thumb_80 != null,'thumb_80 defined');
+					assert(data.thumb_360 != null,'thumb_360 defined');
+					assert(data.thumb_160 != null,'thumb_160 defined');
+					
+					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
+					assert(data.thumb_64.endsWith(fname64));
+					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
+					assert(data.thumb_80.endsWith(fname80));
+					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
+					assert(data.thumb_360.endsWith(fname360));
+					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
+					assert(data.thumb_160.endsWith(fname160));
+					
+					assert(data.title && data.title.length == util.Limits.FILE_TITLE_LENGTH);
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		util.errorlog(e);
+
 		  		done();
 		  	});
 

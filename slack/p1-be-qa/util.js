@@ -37,6 +37,9 @@ module.exports = function(baseURL, secretToken) {
   	secretToken: secretToken,
     baseURL: baseURL,
     channels: undefined,
+    Limits: {
+      'FILE_TITLE_LENGTH': 255
+    },
     FilesErrorStates: {
       'NOT_AUTHED' : 'not_authed',
       'INVALID_CHANNEL' : 'invalid_channel',
