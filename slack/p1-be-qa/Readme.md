@@ -53,7 +53,7 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~bust a field limit: filename~~: 04/13/2016:  *Recommendation*: Do not let anyone know you're using AWS.  The less info people have about internals, the better.  One day we may move off of it, if you read the literature :) 
   * ~~blank channels with all kinds of crap in it 100,000 commas~~ 04/13/2016
   * ~~blank channels with no content but space~~ 04/13/2016
-  * ~c~hannels: Send a lot of channels of same name~~ 4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
+  * ~~channels: Send a lot of channels of same name~~ 4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
   
 
 ####Files.list
