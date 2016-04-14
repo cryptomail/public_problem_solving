@@ -1,5 +1,5 @@
 #Black Box Slack API Testing
-
+![alt text](http://bersama.com/images/mochascreenshot.png "Black Box Slack API Testing")
 
 ##This test library requires Mocha.  Mocha installation is very easy and can be found here: https://mochajs.org/#installation
 
@@ -10,6 +10,7 @@ $ npm install
 $ export SLACK_SECRET_TOKEN=xxxx-xxxxxxxxx-xxxx # I will never EVER put this in a configuration file in (D)RCS.  EVER :D.
 $ mocha
 ```
+
 
 
 
