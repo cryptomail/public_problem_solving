@@ -98,7 +98,45 @@ Never store keys in source code!  Only in configuration where access can/should 
 	describe('Begin testing the files api!', function() {
 		this.timeout(40000);
 		it('Initializes for idempotency', function(done) {
-			done();
+			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
+
+				if(!files || files.length === 0) {
+					done();
+					return;
+				}
+				var promises = [];
+				var toEmit={};
+				var x;
+				util.log('Warn: Idempotency: found ' + files.length + ' files');
+				for(x=0; x < files.length; x++) {
+
+					if(!toEmit[files[x].id]) {
+						toEmit[files[x].id] = files[x].id;
+						util.log('Warn: Idempotency: deleting file id: ' + files[x].id);
+						promises.push(util.deleteFile(files[x].id));
+					}
+					
+				}
+
+				Promise.all(promises).then( function success(results) {
+					util.log('INFO:  Idempotency attained');
+					done();
+					
+				},
+				function error(e) {
+					util.errorlog('found error: ', e);
+					assert(1==2,'idempotency initialization failing');
+					done();
+					
+				})
+			},
+			function error(e) {
+				util.errorlog('found error: ', e);
+				assert(1==2,'idempotency initialization failing');
+				done();
+
+			})
+			
 		},
 		function error(e) {
 
@@ -725,7 +763,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
-		it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.\007  I think the code is doing something less than optimal, or something REALLY smart!', function(done) {
+		it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.', function(done) {
 			
 			var fnameBase = 'kinderegg';
 			var fname = fnameBase + '.png';

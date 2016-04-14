@@ -80,7 +80,7 @@ module.exports = function(baseURL, secretToken) {
 
       var queryString = '';
       for (var key in map) {
-        if (key && map.hasOwnProperty(key)) {
+        if (key && map.hasOwnProperty(key) && map[key] !== null) {
           queryString += (!isFirst ? '&' : '')  + encodeURIComponent(key) + '=' + encodeURIComponent(map[key]);
           isFirst = false;
         }
@@ -95,6 +95,7 @@ module.exports = function(baseURL, secretToken) {
     */
     issueSimpleGETRequest: function(object, command, map) {
       var self = this;
+
       var p = new Promise(function(resolve,reject) {
 
         var URL;
@@ -109,6 +110,7 @@ module.exports = function(baseURL, secretToken) {
         
         var additionalParams;
         if(map) {
+
           additionalParams = self.queryForAdditionalParams(map,/* prepend the first & if nothing before this */isFirst);
           if(additionalParams) {
             URL += additionalParams;
@@ -122,15 +124,17 @@ module.exports = function(baseURL, secretToken) {
         */
         request.get(URL,function (err, res, body) {
           if(err) {
+
             reject(err);
             return;
           }
           if(res.statusCode !== 200) {
-          
+           
             reject('HTTP response: Something bad happened at GET URL ' + commandPart); // Do not log the token info :)
             return;
           }
                 
+
           var res = JSON.parse(body);
 
           resolve(res);
@@ -255,49 +259,48 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
         
-        self.getFileCount(user,channel,types).then(function success(count) {
+        self.getFileCount(user,channel,types).then(
+        function success(count) {
 
-          var iterations = (count / self.Limits.MAX_FILES_IN_WINDOW) + 1;
+          var iterations = Math.floor(count / self.Limits.MAX_FILES_IN_WINDOW) + 1;
           var x;
           var waitFor = [];
           var allFiles = [];
-          for(x=0; x < iterations; x++) {
-            waitFor.push(self.getFiles(user,channel,types));
-          }
+        
+          
+          for(x=0; x < iterations; x++ ) {
 
-          Promise.all( function success(coalescedResults) {
-            var i = 0;
-            for(i=0; i < coalescedResults.length; i++) {
-              if(coalescedResults && coalescedResults[i].files && coalescedResults[i].files.length > 0) {
-                var j = 0;
-                for(j=0; j < coalescedResults[i].files.length; j++) {
-                  allFiles.push(coalescedResults[i].files[j]);
+            self.log('debug: iteration, iterations ',x,iterations);
+            var mapParams={user:user, channel:channel, types:types, page:x+1, count:self.Limits.MAX_FILES_IN_WINDOW};
+
+            var newP = self.issueSimpleGETRequest('files','list',mapParams);
+            
+            waitFor.push(newP);
+
+            Promise.all(waitFor).then(function success(promiseArray) {
+
+              self.log(promiseArray);
+              var y = 0;
+              for(y = 0; y < promiseArray.length; y++) {
+                var z = 0;
+                for(z=0; z < promiseArray[y].files.length; z++) {
+                  allFiles.push(promiseArray[y].files[z]);
                 }
               }
-            }
-            resolve(allFiles); 
-          },
-          function error(e) {
-            reject(e);
-            return;
-          });
 
-        },
-        function error(e) {
-
-        });
-        self.issueSimpleGETRequest('files','list',null).then(
-        function success(data) {
-          if(!data.ok) {
-            reject(data);
-            return;
+              resolve(allFiles);
+            },
+            function error(e) {
+              self.errorlog('getAllFiles failed: ', e);
+              reject(e);
+            })
           }
-          resolve(data.files);
+          
         },
         function error(e) {
+
           reject(e);
         });
-       
         
       });
       return p;

@@ -12,8 +12,6 @@ $ mocha
 ```
 
 
-
-
 ####Breakdown of tests and testing tactics/classes and notes!
 
 ####Particularly, *NOT* covered in this suite:
