@@ -114,6 +114,15 @@ Never store keys in source code!  Only in configuration where access can/should 
 			util.issueSimplePOSTRequest('files','upload',formData).then(
 				function success(data) {
 			
+					/*
+					This suffices the ***simple requirements** outlined in the exercise:
+						files.upload
+						Upload a PNG file no greater than 1 MB in size
+						files.upload returns a file object with a file ID and all expected thumbnail URLs
+						The thumbnail URLs point to what appear to be the correct file – the filename will be a lowercase version of the original upload
+
+						Life is more complicated than happy paths....sigh :) ...go below till the end of this describe for files.upload
+					*/
 					assert(data.id != null,'data id defined');
 					/*
 					Record what we wrote for later cleanup
@@ -618,7 +627,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
-		it('Evil: Send to A LOT OF valid channels', function(done) {
+		it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.  I think the code is doing something less than optimal, or something REALLY smart!', function(done) {
 			
 			var fnameBase = 'kinderegg';
 			var fname = fnameBase + '.png';
@@ -679,7 +688,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  		},
 		  	function error(e) {
 		  		
-		  		assert(1==2,'Evil: Send to A LOT OF valid channels');
+		  		assert(1==2,'Evil: Send to A LOT OF valid channels: This should pass in my opinion.  I think the code is doing something less than optimal!');
 		  		done();
 		  	});
 
