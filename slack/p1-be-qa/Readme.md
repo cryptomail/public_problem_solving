@@ -14,12 +14,12 @@ $ mocha
 
 ####Files.Upload
 1. Positive tests 
-  ** ~~Simple positive test~~ 04/12/2016 
-  ** ~~Simple unknown field in payload test: muppets in form!~~ 04/12/2016 
-  ** ~~unknown content resolves to correct content~~ 04/13/2016 Real PDF upload respresented as kermitthefrog content type.
-  ** ~~unset file type resolves to correct content~~ 04/13/2016 
-  ** ~~send to channel~~ 04/13/2016 
-  ** ~~channels: same channel twice~~ 04/13/2016 
+  * ~~Simple positive test~~ 04/12/2016 
+  * ~~Simple unknown field in payload test: muppets in form!~~ 04/12/2016 
+  * ~~unknown content resolves to correct content~~ 04/13/2016 Real PDF upload respresented as kermitthefrog content type.
+  * ~~unset file type resolves to correct content~~ 04/13/2016 
+  * ~~send to channel~~ 04/13/2016 
+  * ~~channels: same channel twice~~ 04/13/2016 
 2. Negative files.upload
   * ~~Invalid auth~~04/13/2016
   * ~~No auth provided~~ 04/13/2016
