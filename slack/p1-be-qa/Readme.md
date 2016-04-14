@@ -75,5 +75,7 @@ Upon request, I will perform additional tests to suffce the above three items, o
 1. Simple positive test
   * ~~Deletes first file uploaded in session~~ 04/13/2016
 
-2. Negative files.upload
+
+2. Negative tests
+  * ~~Cannot delete same file again~~ 04/13/2016
 3. Super evil tests

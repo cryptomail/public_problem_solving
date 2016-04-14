@@ -865,6 +865,17 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			})
 		});
+		it('Negative: cannot delete same file again', function(done) {
+			util.deleteFile(firstFileUploaded).then(function success(ok) {
+				assert(false,'Why did deleting same file work again?');
+				done();
+			},
+			function error(e) {
+				
+				
+				done();
+			})
+		});
 
 	});
 
