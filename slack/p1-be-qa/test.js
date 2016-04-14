@@ -722,7 +722,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
-		it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.  I think the code is doing something less than optimal, or something REALLY smart!', function(done) {
+		it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.\007  I think the code is doing something less than optimal, or something REALLY smart!', function(done) {
 			
 			var fnameBase = 'kinderegg';
 			var fname = fnameBase + '.png';

@@ -56,12 +56,12 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~channels: Send a lot of channels of same name~~ 4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
   
 
-####Files.list
+####Files.list IN PROGRESS
 1. Simple positive test
 2. Negative files.upload
 3. Super evil tests
 
-####Files.delete
+####Files.delete IN PROGRESS
 1. Simple positive test
 2. Negative files.upload
 3. Super evil tests
