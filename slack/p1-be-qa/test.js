@@ -94,7 +94,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 	});
 
 	describe('Begin testing the files api!', function() {
-		this.timeout(20000);
+		this.timeout(40000);
 		it('Positive: Can upload a file', function(done) {
 			
 			var fnameBase = 'kinderegg';
@@ -338,7 +338,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 			var fnamePath = 'data' + '/' + fname;
 			var formData = {
 							token: secretToken,
-							channels: "#general,#general,#general",
+							channels: "#general,#general",
 							file: {
 								value:  fs.createReadStream(fnamePath),
 								options: {
@@ -518,13 +518,80 @@ Never store keys in source code!  Only in configuration where access can/should 
 
 		});
 		
-		it('Evil: Send to invalid blank channels', function(done) {
+		it('Evil: Send invalid blank channels', function(done) {
 			
 			var fnameBase = 'kinderegg';
 			var fname = fnameBase + '.png';
 			var fnamePath = 'data' + '/' + fname;
 			var formData = {
 							channels: util.blabber(',',100000),
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(1==2,'How did this happen?  Why can we upload a file to a channel that doesnt exist?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		
+		  		assert(!e.ok && e.error === util.FilesErrorStates.INVALID_CHANNEL);
+		  		done();
+		  	});
+
+		});
+		it('Evil: Send a big gulp blank channel', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							channels: util.blabber(' ',1000000),
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+					
+					assert(1==2,'How did this happen?  Why can we upload a file to a channel that doesnt exist?');
+					
+					done();
+				    
+		  		},
+		  	function error(e) {
+		  		
+		  		assert(!e.ok && e.error === util.FilesErrorStates.INVALID_CHANNEL);
+		  		done();
+		  	});
+
+		});
+
+		it('Evil: Send a LOT OF invalid  channels', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							channels: util.blabber('a',100000,','),
 							token:  secretToken ,
 							file: {
 								value:  fs.createReadStream(fnamePath),
@@ -551,7 +618,73 @@ Never store keys in source code!  Only in configuration where access can/should 
 		  	});
 
 		});
+		it('Evil: Send to A LOT OF valid channels', function(done) {
+			
+			var fnameBase = 'kinderegg';
+			var fname = fnameBase + '.png';
+			var fnamePath = 'data' + '/' + fname;
+			var formData = {
+							channels: util.blabber('#general',1000,','),
+							token:  secretToken ,
+							file: {
+								value:  fs.createReadStream(fnamePath),
+								options: {
+									filename: fname,
+									contentType: 'image/png'
+								}
+							}	
+						};
+						
+			
+			util.issueSimplePOSTRequest('files','upload',formData).then(
+				function success(data) {
+			
+					console.log(data);
+					assert(data.id != null,'data id defined');
+					/*
+					Record what we wrote for later cleanup
+					*/
+					filesUploaded[data.id] = data;
 
+					/*
+					TODO: this is a little -funroll-loops here :\
+					*/
+					assert(data.thumb_64 != null,'thumb_64 defined');
+					assert(data.thumb_80 != null,'thumb_80 defined');
+					assert(data.thumb_360 != null,'thumb_360 defined');
+					assert(data.thumb_160 != null,'thumb_160 defined');
+					
+					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
+					assert(data.thumb_64.endsWith(fname64));
+					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
+					assert(data.thumb_80.endsWith(fname80));
+					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
+					assert(data.thumb_360.endsWith(fname360));
+					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
+					assert(data.thumb_160.endsWith(fname160));
+
+					assert(data.channels && data.channels.length === 1);
+
+					util.getChannel('general').then(function success(channeldata) {
+
+						assert(channeldata.id == data.channels[0]);
+						done();
+					},
+					function error(e) {
+						util.errorlog(e);
+						
+						done();
+					});
+				    
+		  		},
+		  	function error(e) {
+		  		
+		  		assert(1==2,'Evil: Send to A LOT OF valid channels');
+		  		done();
+		  	});
+
+
+		});
 
 	});
 

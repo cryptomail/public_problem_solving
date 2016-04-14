@@ -86,7 +86,7 @@ module.exports = function(baseURL, secretToken) {
         */
         request.get(URL,function (err, res, body) {
           if(err) {
-            reject('Something bad happened at POST URL ' + commandPart);
+            reject(err);
             return;
           }
           if(res.statusCode !== 200) {
@@ -119,22 +119,22 @@ module.exports = function(baseURL, secretToken) {
         
         request.post(URL,{formData:formData}, function (err, res, body) {
           if(err) {
-            reject('Something bad happened at POST URL ' + commandPart);
+            reject(err);
             return;
           }
           if(res.statusCode !== 200) {
           
-            reject('HTTP response: Something bad happened at POST URL ' + commandPart); // Do not log the token info :)
+            reject(res); // Do not log the token info :)
             return;
           }
                 
-          var res = JSON.parse(body);
+          var response = JSON.parse(body);
 
-          if(!res || !res.ok) {
-            reject(res);
+          if(!response || !response.ok) {
+            reject(response);
             return;
           }
-          resolve(res.file);
+          resolve(response.file);
 
         });
       });
@@ -203,13 +203,16 @@ module.exports = function(baseURL, secretToken) {
       return p;
     },
 
-    blabber: function(something, ntimes) {
+    blabber: function(something, ntimes, separtor) {
       var n = ntimes;
 
       var output = '';
       while(n > 0) {
         output += something;
         n--;
+        if(separtor && n) {
+          output += separtor;
+        }
       }
 
       return output;

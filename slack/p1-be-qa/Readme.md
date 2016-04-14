@@ -43,8 +43,9 @@ $ mocha
 ```
   * bust a field limit
   * misnomed file... put a PDF into a PNG
-  * ~~channels with all kinds of crap in it 100,000 commas~~ 04/13/2016
-  * channels: 1 MB channel name followed by a single channel
+  * ~~blank channels with all kinds of crap in it 100,000 commas~~ 04/13/2016
+  * ~~blank channels with no content but space~~ 04/13/2016
+  * ~channels: 1 MB channel name followed by a single channel~  4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
   
 
 ####Files.list
