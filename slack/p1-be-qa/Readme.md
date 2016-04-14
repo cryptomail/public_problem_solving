@@ -7,6 +7,7 @@
 ```bash
 $ npm install -g mocha
 $ npm install
+$ export SLACK_SECRET_TOKEN=xxxx-xxxxxxxxx-xxxx # I will never EVER put this in a configuration file in (D)RCS.  EVER :D.
 $ mocha
 ```
 

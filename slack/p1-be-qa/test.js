@@ -49,6 +49,8 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+var firstFileUploaded = null;
+
 describe('Test suite to test Slack 3 API Endpoints: files.upload, files.list, files.delete', function() {
 
 /*
@@ -134,6 +136,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 					Record what we wrote for later cleanup
 					*/
 					filesUploaded[data.id] = data;
+					firstFileUploaded = data.id;
 
 					/*
 					TODO: this is a little -funroll-loops here :\
@@ -790,8 +793,8 @@ Never store keys in source code!  Only in configuration where access can/should 
 
 		});
 
-		it('Positive: Gets total file count', function(done) {
-			util.getFileCount(null,null,null).then(function success(cnt) {
+		it('Positive: Gets total image file count', function(done) {
+			util.getFileCount(null,null,util.FilesFileTypes.IMAGES).then(function success(cnt) {
 				assert(cnt >= 0);
 				done();
 			},
@@ -801,10 +804,10 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			})
 		});
-		it('Positive: Gets all files and matches count', function(done) {
-			util.getAllFiles(null,null,null).then(function success(files) {
+		it('Positive: Gets all image files and matches count', function(done) {
+			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
 				assert(files != null);
-				util.getFileCount(null,null,null).then( function(cnt) {
+				util.getFileCount(null,null,util.FilesFileTypes.IMAGES).then( function(cnt) {
 					assert(files.length === cnt,'We got all the files congrent to the count');
 					done();
 				},
@@ -818,6 +821,18 @@ Never store keys in source code!  Only in configuration where access can/should 
 			function error(e) {
 				util.errorlog(e);
 				assert(1==2,'Get file count failed');
+				done();
+			});
+		});
+		it('Positive: deletes first file', function(done) {
+			util.deleteFile(firstFileUploaded).then(function success(ok) {
+				delete filesUploaded[firstFileUploaded];
+				assert(ok);
+				done();
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get deletes first file');
 				done();
 			})
 		});

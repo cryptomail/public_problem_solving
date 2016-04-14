@@ -54,6 +54,9 @@ module.exports = function(baseURL, secretToken) {
       'REQUEST_TIMEOUT' : 'request_timeout',
       'NO_FILE' : 'no_file',
     },
+    FilesFileTypes: {
+      'IMAGES' : 'images'
+    },
 
     /*
       Use the console but emit error / warn / debug candy
@@ -77,10 +80,12 @@ module.exports = function(baseURL, secretToken) {
 
       var queryString = '';
       for (var key in map) {
-        if (map.hasOwnProperty(key)) {
+        if (key && map.hasOwnProperty(key)) {
           queryString += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(map[key]);
         }
       }
+
+      return queryString;
     },
     /*
     Issue a simple GET request on slack api: Object.Command
@@ -99,6 +104,8 @@ module.exports = function(baseURL, secretToken) {
           additionalParams = self.queryForAdditionalParams(map);
           URL += additionalParams;
         } 
+
+        
         /*
         Snap the main request
         */
@@ -268,7 +275,7 @@ module.exports = function(baseURL, secretToken) {
         function error(e) {
 
         });
-        self.issueSimpleGETRequest('files','list').then(
+        self.issueSimpleGETRequest('files','list',null).then(
         function success(data) {
           if(!data.ok) {
             reject(data);
@@ -288,7 +295,7 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
         if((!self.channels) || forceRefresh) {
-          self.issueSimpleGETRequest('channels','list').then(
+          self.issueSimpleGETRequest('channels','list',null).then(
           function success(data) {
             if(!data.ok) {
               reject('Data is not ok');
@@ -307,7 +314,28 @@ module.exports = function(baseURL, secretToken) {
       });
       return p;
     },
-
+    deleteFile: function(fileId) {
+      var self = this;
+      var p = new Promise(function(resolve,reject) {
+        var something = false;
+        var params = {};
+        params.file = fileId;
+        
+        self.issueSimpleGETRequest('files','delete',params).then(
+        function success(data) {
+          if(!data.ok) {
+            reject(data);
+            return;
+          }
+          resolve(data.ok);
+        },
+        function error(e) {
+          reject(e);
+        });
+       
+      });
+      return p;
+    },
     blabber: function(something, ntimes, separtor) {
       var n = ntimes;
 
