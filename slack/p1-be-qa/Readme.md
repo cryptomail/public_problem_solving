@@ -10,12 +10,12 @@ $ npm install
 $ mocha
 ```
 
-####Breakdown of tests and testing tactics/classes:
+####Breakdown of tests and testing tactics/classes and notes!
 
 ####Files.Upload
 1. Positive tests 
   * ~~Simple positive test~~ 04/12/2016 
-  * unknown entity fields: Determination:  Slack API is friendly in that ignores unknown elements: 
+  * ~~unknown entity fields~~ Determination:  Slack API is friendly in that ignores unknown elements: 
   ```javascript
   	var formData = {
 							muppets: 'animal, kermit, miss piggy',
