@@ -20,7 +20,7 @@ $ mocha
 
 
 ####Mildly covered in this suite:
-1. Field limits testing
+1. Field limits testing/fuzzing
 
 Upon request, I will perform additional tests to suffce the above three items, or describe a plan that can suffice them.
 
