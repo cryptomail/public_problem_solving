@@ -269,8 +269,6 @@ module.exports = function(baseURL, secretToken) {
         
           
           for(x=0; x < iterations; x++ ) {
-
-            self.log('debug: iteration, iterations ',x,iterations);
             var mapParams={user:user, channel:channel, types:types, page:x+1, count:self.Limits.MAX_FILES_IN_WINDOW};
 
             var newP = self.issueSimpleGETRequest('files','list',mapParams);
@@ -278,8 +276,6 @@ module.exports = function(baseURL, secretToken) {
             waitFor.push(newP);
 
             Promise.all(waitFor).then(function success(promiseArray) {
-
-              self.log(promiseArray);
               var y = 0;
               for(y = 0; y < promiseArray.length; y++) {
                 var z = 0;

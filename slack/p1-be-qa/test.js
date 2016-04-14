@@ -113,7 +113,17 @@ Never store keys in source code!  Only in configuration where access can/should 
 					if(!toEmit[files[x].id]) {
 						toEmit[files[x].id] = files[x].id;
 						util.log('Warn: Idempotency: deleting file id: ' + files[x].id);
-						promises.push(util.deleteFile(files[x].id));
+
+						var innerP = new Promise( function(resolve,reject) {
+							util.deleteFile(files[x].id).then( function success(data) {
+								resolve(data);
+							},
+							function reject(err) {
+								resolve({ok:true});
+							});
+
+						});
+						promises.push(innerP);
 					}
 					
 				}
@@ -844,9 +854,9 @@ Never store keys in source code!  Only in configuration where access can/should 
 		});
 		it('Positive: Gets all image files and matches count', function(done) {
 			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
-				assert(files != null);
+				assert(files != null,'files should not be null');
 				util.getFileCount(null,null,util.FilesFileTypes.IMAGES).then( function(cnt) {
-					assert(files.length === cnt,'We got all the files congrent to the count');
+					assert(files.length === cnt,'We got all the files congrent to the count: from getallfiles: ' + files.length + ' from getcount:' + cnt);
 					done();
 				},
 				function error(e) {
@@ -854,7 +864,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 					assert(1==2,'Error on getting all files');
 					done();
 				})
-				done();
+				
 			},
 			function error(e) {
 				util.errorlog(e);
