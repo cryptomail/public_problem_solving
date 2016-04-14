@@ -30,7 +30,7 @@ $ mocha
 ```
   * ~~Simple unknown field in payload test: muppets in form!~~ 04/12/2016 
   * ~~unknown content resolves to correct content~~ 04/13/2016 Real PDF upload respresented as kermitthefrog content type.
-  * ~~unset file type resolves to correct content~~ 04/13/2016 
+  * ~~unset file type resolves to correct content~~ 04/13/2016 Lied to using .png extension but magic is PDF! :) worked and read magic properly.
   * ~~send to channel~~ 04/13/2016 
   * ~~channels: same channel twice~~ 04/13/2016 
 2. Negative tests
@@ -42,7 +42,6 @@ $ mocha
 
 3. Super evil tests
   * bust a field limit
-  * misnomed file... put a PDF into a PNG
   * ~~blank channels with all kinds of crap in it 100,000 commas~~ 04/13/2016
   * ~~blank channels with no content but space~~ 04/13/2016
   * ~channels: 1 MB channel name followed by a single channel~  4/13/2016 Notes: This should be successful.  Likely an internal API is not doing something correctly.  I will fix it. :)
