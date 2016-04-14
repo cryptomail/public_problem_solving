@@ -11,8 +11,6 @@ $ export SLACK_SECRET_TOKEN=xxxx-xxxxxxxxx-xxxx # I will never EVER put this in 
 $ mocha
 ```
 
-![alt text](https://photos-4.dropbox.com/t/2/AADzj9pUVVGoSkK_FeodMP8vTu52DPDaHes7bPf1LhA9nQ/12/124320234/png/32x32/1/_/1/2/Screenshot%202016-04-14%2008.57.28.png/EKaL3l8Y2AIgAigC/0RNnyiO-v-H7Xmx-rtl90RBBT8QviYzCM5aezHwoZsw?size=1600x1200&size_mode=3 "Mocha output")
-
 
 
 ####Breakdown of tests and testing tactics/classes and notes!
