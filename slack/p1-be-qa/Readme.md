@@ -10,7 +10,7 @@ $ npm install
 $ mocha
 ```
 
-####Todo List:
+####Breakdown of tests and testing tactics/classes:
 
 ####Files.Upload
 1. Positive tests 
