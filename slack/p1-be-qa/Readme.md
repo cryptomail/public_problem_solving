@@ -1,4 +1,4 @@
-#Slack API Testing
+#Black Box Slack API Testing
 
 
 ##This test library requires Mocha.  Mocha installation is very easy and can be found here: https://mochajs.org/#installation
