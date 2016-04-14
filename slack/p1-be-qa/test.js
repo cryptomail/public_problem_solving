@@ -98,7 +98,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 	describe('Begin testing the files api!', function() {
 		this.timeout(40000);
 		it('Initializes for idempotency', function(done) {
-			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
+			util.getAllFiles(null,null,null).then(function success(files) {
 
 				if(!files || files.length === 0) {
 					done();
@@ -119,6 +119,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 								resolve(data);
 							},
 							function reject(err) {
+								util.log('WARNING: could not delete file ', err);
 								resolve({ok:true});
 							});
 

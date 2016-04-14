@@ -333,13 +333,24 @@ module.exports = function(baseURL, secretToken) {
         
         self.issueSimpleGETRequest('files','delete',params).then(
         function success(data) {
+          
+          if(!data) {
+            data = {};
+            data.ok = false;
+            data.error = 'UNKNOWN';
+          }
           if(!data.ok) {
+            data.file = fileId;
+            self.log('DEBUG: delete file may have failed  ' + fileId);
             reject(data);
             return;
           }
+          self.log('DEBUG: deleted file ' + fileId);
           resolve(data.ok);
         },
         function error(e) {
+          self.log('WARN: delete file may have failed ' + fileId);
+          e.file = fileId;
           reject(e);
         });
        
