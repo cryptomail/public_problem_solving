@@ -71,19 +71,33 @@ module.exports = function(baseURL, secretToken) {
     var retval = fname + separator + thumbsize + '.' + ftype;
     return retval.toLowerCase();
   },
+
+    queryForAdditionalParams: function(map) {
+
+      var queryString = '';
+      for (var key in map) {
+        if (map.hasOwnProperty(key)) {
+          queryString += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(map[key]);
+        }
+      }
+    },
     /*
     Issue a simple GET request on slack api: Object.Command
     Assumes baseURL is here, along with the secret token.
     Extra safety employed on construction of URL to ensure no hanky panky
     */
-    issueSimpleGETRequest: function(object, command) {
+    issueSimpleGETRequest: function(object, command, map) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
 
         
         var commandPart = self.baseURL + object + '.' + command;
         var URL = commandPart + '?' + 'token=' + encodeURIComponent(self.secretToken);
-
+        var additionalParams;
+        if(map) {
+          additionalParams = self.queryForAdditionalParams(map);
+          URL += additionalParams;
+        } 
         /*
         Snap the main request
         */
@@ -182,6 +196,56 @@ module.exports = function(baseURL, secretToken) {
     },
 
 
+    getFileCount: function(user, channel, types) {
+      var self = this;
+      var p = new Promise(function(resolve,reject) {
+        
+        var params = {};
+        if(user) {
+          params.user = user;
+        }
+        if(channel) {
+          params.channel = channel;
+        }
+        if(types) {
+          params.types = types;
+        }
+        self.issueSimpleGETRequest('files','list',params).then(
+        function success(data) {
+          if(!data.ok) {
+            reject(data);
+            return;
+          }
+          resolve(data.files);
+        },
+        function error(e) {
+          reject(e);
+        });
+       
+        
+      });
+      return p;
+    },
+    getAllFiles: function(user,channel,types) {
+      var self = this;
+      var p = new Promise(function(resolve,reject) {
+        
+        self.issueSimpleGETRequest('files','list').then(
+        function success(data) {
+          if(!data.ok) {
+            reject(data);
+            return;
+          }
+          resolve(data.files);
+        },
+        function error(e) {
+          reject(e);
+        });
+       
+        
+      });
+      return p;
+    },
     getChannels: function(forceRefresh) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
