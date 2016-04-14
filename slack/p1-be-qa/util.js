@@ -38,7 +38,8 @@ module.exports = function(baseURL, secretToken) {
     baseURL: baseURL,
     channels: undefined,
     Limits: {
-      'FILE_TITLE_LENGTH': 255
+      'FILE_TITLE_LENGTH': 255,
+      'MAX_FILES_IN_WINDOW' : 1000
     },
     FilesErrorStates: {
       'NOT_AUTHED' : 'not_authed',
@@ -199,16 +200,22 @@ module.exports = function(baseURL, secretToken) {
     getFileCount: function(user, channel, types) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
-        
+        var something = false;
         var params = {};
         if(user) {
+          something = true;
           params.user = user;
         }
         if(channel) {
+          something = true;
           params.channel = channel;
         }
         if(types) {
+          something = true;
           params.types = types;
+        }
+        if(!something) {
+          params = null;
         }
         self.issueSimpleGETRequest('files','list',params).then(
         function success(data) {
@@ -216,7 +223,7 @@ module.exports = function(baseURL, secretToken) {
             reject(data);
             return;
           }
-          resolve(data.files);
+          resolve(data.paging.total);
         },
         function error(e) {
           reject(e);
@@ -230,6 +237,37 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
         
+        self.getFileCount(user,channel,types).then(function success(count) {
+
+          var iterations = (count / self.Limits.MAX_FILES_IN_WINDOW) + 1;
+          var x;
+          var waitFor = [];
+          var allFiles = [];
+          for(x=0; x < iterations; x++) {
+            waitFor.push(self.getFiles(user,channel,types));
+          }
+
+          Promise.all( function success(coalescedResults) {
+            var i = 0;
+            for(i=0; i < coalescedResults.length; i++) {
+              if(coalescedResults && coalescedResults[i].files && coalescedResults[i].files.length > 0) {
+                var j = 0;
+                for(j=0; j < coalescedResults[i].files.length; j++) {
+                  allFiles.push(coalescedResults[i].files[j]);
+                }
+              }
+            }
+            resolve(allFiles); 
+          },
+          function error(e) {
+            reject(e);
+            return;
+          });
+
+        },
+        function error(e) {
+
+        });
         self.issueSimpleGETRequest('files','list').then(
         function success(data) {
           if(!data.ok) {

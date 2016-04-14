@@ -790,6 +790,38 @@ Never store keys in source code!  Only in configuration where access can/should 
 
 		});
 
+		it('Positive: Gets total file count', function(done) {
+			util.getFileCount(null,null,null).then(function success(cnt) {
+				assert(cnt >= 0);
+				done();
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			})
+		});
+		it('Positive: Gets all files and matches count', function(done) {
+			util.getAllFiles(null,null,null).then(function success(files) {
+				assert(files != null);
+				util.getFileCount(null,null,null).then( function(cnt) {
+					assert(files.length === cnt,'We got all the files congrent to the count');
+					done();
+				},
+				function error(e) {
+					util.errorlog(e);
+					assert(1==2,'Error on getting all files');
+					done();
+				})
+				done();
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			})
+		});
+
 	});
 
 });
