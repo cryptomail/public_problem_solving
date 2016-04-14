@@ -62,12 +62,14 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~Can get a count of all the images~~ 04/13/2016: Gets first file, looks at paging.count
   * ~~Can get a listing of all the images~~ 04/13/2016: Gets count from step above, and gets all files
 
-2. Negative files.list
+2. Negative tests
+  * ~~Invalid auth~~04/13/2016
+  * ~~No auth provided~~ 04/13/2016
 3. Super evil tests
 
 ####Files.delete 
 1. Simple positive test
   * ~~Deletes first file uploaded in session~~ 04/13/2016
-  
+
 2. Negative files.upload
 3. Super evil tests

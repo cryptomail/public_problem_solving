@@ -76,12 +76,13 @@ module.exports = function(baseURL, secretToken) {
     return retval.toLowerCase();
   },
 
-    queryForAdditionalParams: function(map) {
+    queryForAdditionalParams: function(map, isFirst) {
 
       var queryString = '';
       for (var key in map) {
         if (key && map.hasOwnProperty(key)) {
-          queryString += '&' + encodeURIComponent(key) + '=' + encodeURIComponent(map[key]);
+          queryString += (!isFirst ? '&' : '')  + encodeURIComponent(key) + '=' + encodeURIComponent(map[key]);
+          isFirst = false;
         }
       }
 
@@ -96,13 +97,23 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
 
-        
+        var URL;
         var commandPart = self.baseURL + object + '.' + command;
-        var URL = commandPart + '?' + 'token=' + encodeURIComponent(self.secretToken);
+        var isFirst = true;
+        if(self.secretToken) {
+          URL =  commandPart + '?' + 'token=' + encodeURIComponent(self.secretToken);
+          isFirst = false;
+        } else {
+          URL = commandPart + '?';
+        }
+        
         var additionalParams;
         if(map) {
-          additionalParams = self.queryForAdditionalParams(map);
-          URL += additionalParams;
+          additionalParams = self.queryForAdditionalParams(map,/* prepend the first & if nothing before this */isFirst);
+          if(additionalParams) {
+            URL += additionalParams;
+          }
+          
         } 
 
         

@@ -824,6 +824,35 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
+		it('Negative: Can\'t get all image files and matches count without auth', function(done) {
+			util.secretToken =null;
+			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
+				util.secretToken =secretToken;
+				util.errorlog('not supposed to succeeed Negative: Gets all image files and matches count with no auth');
+				assert(1==2,'not supposed to succeed with no auth');
+				done();
+			},
+			function error(e) {
+				
+				util.secretToken = secretToken;
+				assert(!e.ok && e.error === util.FilesErrorStates.NOT_AUTHED);
+				done();
+			});
+		});
+		it('Negative: Can\'t gets all image files and matches count with invalid auth', function(done) {
+			util.secretToken =secretToken + 'misspiggy';
+			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
+				util.secretToken =self.secretToken;
+				util.errorlog('not supposed to succeeed Negative: Gets all image files and matches count with invalid auth');
+				assert(1==2,'not supposed to succeed with no auth');
+				done();
+			},
+			function error(e) {
+				util.secretToken = secretToken;
+				assert(!e.ok && e.error === util.FilesErrorStates.INVALID_AUTH);
+				done();
+			});
+		});
 		it('Positive: deletes first file', function(done) {
 			util.deleteFile(firstFileUploaded).then(function success(ok) {
 				delete filesUploaded[firstFileUploaded];
