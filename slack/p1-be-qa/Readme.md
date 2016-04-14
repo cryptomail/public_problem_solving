@@ -19,6 +19,7 @@ $ mocha
 
 Upon request, I will perform additional tests to suffce the above three items, or describe a plan that can suffice them.
 
+####Covered:
 
 ####Files.Upload
 1. Positive tests 
