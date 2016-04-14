@@ -13,9 +13,10 @@ $ mocha
 
 ####Breakdown of tests and testing tactics/classes and notes!
 
-####Particularly, *NOT* Covered:
+####Particularly, *NOT* covered in this suite:
 1. Scalability
 2. Performance
+Mildly covered:
 3. Some: Bulk Limits testing
 
 Upon request, I will perform additional tests to suffce the above three items, or describe a plan that can suffice them.
