@@ -12,6 +12,14 @@ $ mocha
 
 ####Breakdown of tests and testing tactics/classes and notes!
 
+####Particularly, *NOT* Covered:
+1. Scalability
+2. Performance
+3. Some: Bulk Limits testing
+
+Upon request, I will perform additional tests to suffce the above three items, or describe a plan that can suffice them.
+
+
 ####Files.Upload
 1. Positive tests 
   * ~~Simple positive test~~ 04/12/2016 
