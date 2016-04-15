@@ -151,7 +151,7 @@ This causes a test failure in my suite and it is my belief that the client is ev
 The code is under the block: `it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.')`
 
 ##Recommendation:
-Do not iterate on the channels until they have been resolved to a set. aka pipe to uniq :shipit:
+Do not iterate on the channels until they have been resolved to a set. aka pipe to uniq somehow :shipit:
 
 #Aynchronous Quirk FOUND:
 It appears that some files take an inordinate amount of time to really disappear after asking for a formal delete.
