@@ -11,6 +11,8 @@ $ export SLACK_SECRET_TOKEN=xxxx-xxxxxxxxx-xxxx # I will never EVER put this in 
 $ mocha
 ```
 
+####Video Demonstration:
+https://www.dropbox.com/s/frjedkifyqyx0sj/slack-api.mp4?dl=0
 
 ####Breakdown of tests and testing tactics/classes and notes!
 
