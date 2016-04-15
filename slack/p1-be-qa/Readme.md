@@ -115,6 +115,17 @@ I understand that 'eventual consistency' may be at play, but as you can see here
 
 Both files.upload and files.delete appear to be asynchronous wherein the user may upload a file, yet it may or may not show in the listing at the time of request, so testing would require knowledge of that.  These tests are architected in such a way that they exercise a class of the API one at a time.  In this case: files.upload, followed by files.list, followed by files.delete.
 
+##Recommendation:
+Checksum the system.  If there is a meta data store storing meta data about files, then once in a while run a checksum to ensure that:
+1. The file purported to be in the meta data exists in S3 (expensive I know :frown: )
+2. The meta data is well formed.  The blank meta data could be caused by it being malformed
+Should I be gainfully employed by Slack, I will:
+* find the module responsible
+* investigate the data using my private key token
+* identify the area of code
+* investigate any remediations
+* submit a patch for the code
+
 
 #BUG #2 FOUND:
 Sending a file to a channel referenced multiple times yields an iteration on the same channel when it should not.
