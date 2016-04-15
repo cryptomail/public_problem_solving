@@ -1,5 +1,5 @@
 #Black Box Slack API Testing
-![alt text](http://bersama.com/images/mochascreenshot.png "Black Box Slack API Testing")
+![alt text](https://raw.githubusercontent.com/cryptomail/public_problem_solving/master/slack/p1-be-qa/images/screenshot.png "Black Box Slack API Testing")
 
 ##This test library requires Mocha.  Mocha installation is very easy and can be found here: https://mochajs.org/#installation
 
