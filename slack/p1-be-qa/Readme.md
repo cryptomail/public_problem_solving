@@ -93,6 +93,10 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~Delete with HUGE fuzzed ID~~ 04/14/2016
   * ~~Delete with mildly fuzzed ID 1000~~ 04/14/2016
 
+####Checksum postamble tests / unwinding:
+* ~~Checksum: list all the files, ensure we have the files recorded~~ 04/14/2016
+* ~~Checksum: delete all the files that we created, and have recorded~~ 04/14/2016
+* Checksum: wait 30sec and start list again ensure nothing comes back.
 
 ##Findings:
 

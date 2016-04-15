@@ -1057,8 +1057,22 @@ Never store keys in source code!  Only in configuration where access can/should 
 					assert(1==2,'Checksum: Teardown: Removes files initialization failing');
 					done();
 
-				})
+				});
 				
+			});
+
+			it('Checksum: Lists everything that we wrote assuming they\'re gone', function(done) {
+				util.getAllFiles(null,null,null).then(function success(files) {
+					var x;
+
+					assert(!files || !files.length <= util.specialSnowflakeCount);
+					done();
+				},
+				function error(e) {
+					util.errorlog('error met: ',e );
+					assert(false,'Could not list all the files');
+					done();
+				});
 			});
 		});
 
