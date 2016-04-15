@@ -175,7 +175,7 @@ It is my opinion that after a file has been requested to be deleted, that it **n
 If a file has been requested for deletion,  ensure delete is synchronous,or fast enough to be perceived as such.
 
 #The Very Good:
-I have tested many fuzzy things like upload a PDF file, yet professing it's a PDF.
+I have tested many fuzzy things like upload a PDF file, yet professing it's a PNG.
 Please check: `it(Positive: unset filetype or LIED to DOT FILE resolves to correct filetype')`
 When the listing query comes back from the file, the file is appropriately tagged with filetype PDF.  That means the system is adequately tesing for magic even if the file envelope is misleading.  
 ```javascript
