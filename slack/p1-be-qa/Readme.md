@@ -72,10 +72,12 @@ Upon request, I will perform additional tests to suffce the above three items, o
   * ~~Invalid auth~~04/13/2016
   * ~~No auth provided~~ 04/13/2016
   * Test paging out of bounds
-  * Test paging unknown parameters
-  * 
+  * Test paging fuzzed parameters
+  
+
 3. Super evil tests
   * Test paging bad type params
+  * Test filter type with all kinds of bad stuff (instructions specifically say to not do any exploration on type, but I'll do it anyway)
   * Test paging HUGE / invalid numbers
 
 ####Files.delete 
@@ -92,3 +94,6 @@ Upon request, I will perform additional tests to suffce the above three items, o
 
 3. Super evil tests
   * Delete with HUGE fuzzed ID
+
+
+  

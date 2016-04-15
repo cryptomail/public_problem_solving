@@ -35,6 +35,7 @@ module.exports = function(baseURL, secretToken) {
 
   return {
   	secretToken: secretToken,
+    specialSnowflakeCount: 0, /* Slack has a bug where meta data may be incorrect! */
     baseURL: baseURL,
     channels: undefined,
     Limits: {
@@ -52,6 +53,8 @@ module.exports = function(baseURL, secretToken) {
       'INVALID_POST_TYPE' : 'invalid_post_type',
       'MISSING_POST_TYPE' : 'missing_post_type',
       'REQUEST_TIMEOUT' : 'request_timeout',
+      'FILE_DELETED' : 'file_deleted',
+      'FILE_NOT_FOUND' : 'file_not_found',
       'NO_FILE' : 'no_file',
     },
     FilesFileTypes: {
@@ -255,6 +258,54 @@ module.exports = function(baseURL, secretToken) {
       });
       return p;
     },
+
+    getFiles: function(user,channel,types,count,page) {
+      var self = this;
+      var p = new Promise(function(resolve,reject) {
+        
+        self.getFileCount(user,channel,types).then(
+        function success(count) {
+
+          var iterations = Math.floor(count / self.Limits.MAX_FILES_IN_WINDOW) + 1;
+          var x;
+          var waitFor = [];
+          var allFiles = [];
+        
+          
+          for(x=0; x < 1; x++ ) {
+            var mapParams={user:user, channel:channel, types:types, page:page, count:count};
+
+            var newP = self.issueSimpleGETRequest('files','list',mapParams);
+            
+            waitFor.push(newP);
+
+            Promise.all(waitFor).then(function success(promiseArray) {
+              var y = 0;
+              for(y = 0; y < promiseArray.length; y++) {
+                var z = 0;
+                for(z=0; z < promiseArray[y].files.length; z++) {
+                  allFiles.push(promiseArray[y].files[z]);
+                  
+                }
+              }
+
+              resolve(allFiles);
+            },
+            function error(e) {
+              self.errorlog('getFiles failed: ', e);
+              reject(e);
+            })
+          }
+          
+        },
+        function error(e) {
+
+          reject(e);
+        });
+        
+      });
+      return p;
+    },
     getAllFiles: function(user,channel,types) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
@@ -281,6 +332,7 @@ module.exports = function(baseURL, secretToken) {
                 var z = 0;
                 for(z=0; z < promiseArray[y].files.length; z++) {
                   allFiles.push(promiseArray[y].files[z]);
+                  
                 }
               }
 
@@ -324,6 +376,7 @@ module.exports = function(baseURL, secretToken) {
       });
       return p;
     },
+
     deleteFile: function(fileId) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
@@ -341,11 +394,11 @@ module.exports = function(baseURL, secretToken) {
           }
           if(!data.ok) {
             data.file = fileId;
-            self.log('DEBUG: delete file may have failed  ' + fileId);
+            //self.log('DEBUG: delete file may have failed  ' + fileId);
             reject(data);
             return;
           }
-          self.log('DEBUG: deleted file ' + fileId);
+          //self.log('DEBUG: deleted file ' + fileId);
           resolve(data.ok);
         },
         function error(e) {
