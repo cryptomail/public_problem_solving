@@ -100,7 +100,7 @@ Upon request, I will perform additional tests to suffce the above three items, o
 
 ##Findings:
 
-BUG:
+#BUG #1 FOUND:
 I have found throughout the course of this exercise that while performing some fuzzing tests with bad/inappropriate input, I may have caused the Slack API to have bad meta data with my account!
 Here in this image: 
 
@@ -114,4 +114,8 @@ I understand that 'eventual consistency' may be at play, but as you can see here
 
 
 Both files.upload and files.delete appear to be asynchronous wherein the user may upload a file, yet it may or may not show in the listing at the time of request, so testing would require knowledge of that.  These tests are architected in such a way that they exercise a class of the API one at a time.  In this case: files.upload, followed by files.list, followed by files.delete.
+
+
+
+
   
