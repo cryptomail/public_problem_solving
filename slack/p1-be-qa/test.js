@@ -993,6 +993,29 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			})
 		});
+
+		describe('Files API Postable Checksum:', function() {
+			it('Checksum: Lists everything that we wrote', function(done) {
+				util.getAllFiles(null,null,null).then(function success(files) {
+					var x;
+
+					for(x=0; x < files.length; x++) {
+						if(!filesUploaded[files[x].id]) {
+							util.errorlog('Checksum: Lists cant find ' + files[x].id);
+							assert(false,'file not found: ' + files[x].id);
+							break;
+						}
+					}
+					done();
+				},
+				function error(e) {
+					util.errorlog('error met: ',e );
+					assert(false,'Could not list all the files');
+					done();
+				});
+			});
+		});
+
 	});
 
 });

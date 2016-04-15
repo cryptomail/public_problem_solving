@@ -96,6 +96,18 @@ Upon request, I will perform additional tests to suffce the above three items, o
 
 ##Findings:
 
+BUG:
+I have found throughout the course of this exercise that while performing some fuzzing tests with bad/inappropriate input, I may have caused the Slack API to have bad meta data with my account!
+Here in this image: 
+
+![alt text](https://raw.githubusercontent.com/cryptomail/public_problem_solving/master/slack/p1-be-qa/images/slack_bug.png "Black Box Slack API Testing")
+
+We clearly see that the Slack API is professing that there are two files represented in the paging section of the results:
+To me, paging.total = 2 means there will be two files, yet we see clearly from the URL that there are none.
+I have a feeling that somehow the meta data got out of sync between the storage and the actual storage.
+If this occurs, Slack API developers should be alerted and a careful analysis should be undertaken to understand why/how this could occur.
+I understand that 'eventual consistency' may be at play, but as you can see here, the image you are seeing is after several hours at rest.
 
 
+Both files.upload and files.delete appear to be asynchronous wherein the user may upload a file, yet it may or may not show in the listing at the time of request, so testing would require knowledge of that.  These tests are architected in such a way that they exercise a class of the API one at a time.  In this case: files.upload, followed by files.list, followed by files.delete.
   
