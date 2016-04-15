@@ -136,7 +136,7 @@ module.exports = function(baseURL, secretToken) {
           }
           if(res.statusCode !== 200) {
            
-            reject('HTTP response: Something bad happened at GET URL ' + commandPart); // Do not log the token info :)
+            reject('HTTP response: Something bad happened at GET URL ' + commandPart + ' res.statusCode: ' + res.statusCode); // Do not log the token info :)
             return;
           }
                 
@@ -395,7 +395,7 @@ module.exports = function(baseURL, secretToken) {
           resolve(data.ok);
         },
         function error(e) {
-          self.log('WARN: delete file may have failed ' + fileId);
+          //self.log('WARN: delete file may have failed ' + fileId);
           e.file = fileId;
           reject(e);
         });

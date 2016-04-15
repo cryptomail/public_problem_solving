@@ -936,7 +936,63 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			})
 		});
+		it('Negative: something that never existed', function(done) {
+			util.deleteFile('shmoo').then(function success(ok) {
+				assert(false,'Why did deleting same file work again?');
+				done();
+			},
+			function error(e) {
+				
+				assert(e.error === util.FilesErrorStates.FILE_NOT_FOUND);
+				done();
+			})
+		});
 
+		it('Negative: Can\'t delete with invalid auth', function(done) {
+			util.secretToken =secretToken + 'misspiggy';
+			util.deleteFile('shmoo').then(function success(ok) {
+				assert(false,'Why did deleting same file work again?');
+				done();
+			},
+			function error(e) {
+				
+				assert(e.error === util.FilesErrorStates.INVALID_AUTH);
+				done();
+			})
+		});
+		it('Negative: Can\'t delete with no auth', function(done) {
+			util.secretToken = null;
+			util.deleteFile('shmoo').then(function success(ok) {
+				util.secretToken =secretToken;
+				assert(false,'Why did deleting same file work again?');
+				done();
+			},
+			function error(e) {
+				util.secretToken =secretToken;
+				assert(e.error === util.FilesErrorStates.NOT_AUTHED);
+				done();
+			})
+		});
+
+		it('Evil: delete really big filename', function(done) {
+			util.deleteFile(util.blabber('shmoo',10000)).then(function success(ok) {
+				assert(false,'delete really big filename should not pass');
+				done();
+			},
+			function error(e) {
+				
+				done();
+			})
+		});
+		it('Evil: delete  mildly big filename', function(done) {
+			util.deleteFile(util.blabber('z',800)).then(function success(ok) {
+				assert(false,'Why did this return ok');
+				done();
+			},
+			function error(e) {
+				done();
+			})
+		});
 	});
 
 });

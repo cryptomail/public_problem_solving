@@ -76,21 +76,26 @@ Upon request, I will perform additional tests to suffce the above three items, o
   
 
 3. Super evil tests
-  * ~~Test paging bad type params~~ 04/13/2016
-  * ~~Test paging HUGE / invalid numbers~~ 04/13/2016
+  * ~~Test paging bad type params~~ 04/14/2016
+  * ~~Test paging HUGE / invalid numbers~~ 04/14/2016
 
 ####Files.delete 
 1. Simple positive test
-  * ~~Deletes first file uploaded in session~~ 04/13/2016
+  * ~~Deletes first file uploaded in session~~ 04/14/2016
   
 2. Negative tests
-  * ~~Cannot delete same file again~~ 04/13/2016
-  * Delete something that never existed
-  * Delete without auth
-  * Delete with bad auth
+  * ~~Cannot delete same file again~~ 04/14/2016
+  * ~~Delete something that never existed~~ 04/14/2016
+  * ~~Delete without auth~~ 04/14/2016
+  * ~~Delete with bad auth~~ 04/14/2016
 
 3. Super evil tests
-  * Delete with HUGE fuzzed ID
+  * ~~Delete with HUGE fuzzed ID~~ 04/14/2016
+  * ~~Delete with mildly fuzzed ID 1000~~ 04/14/2016
+
+
+##Findings:
+
 
 
   
