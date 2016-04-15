@@ -1014,6 +1014,52 @@ Never store keys in source code!  Only in configuration where access can/should 
 					done();
 				});
 			});
+			it('Checksum: Teardown: Removes files we wrote', function(done) {
+
+				util.getAllFiles(null,null,null).then(function success(files) {
+
+					if(!files || files.length === 0) {
+						done();
+						return;
+					}
+					var promises = [];
+					var toEmit={};
+					var x;
+					//util.log('Warn: Idempotency: found ' + files.length + ' files');
+					for(x=0; x < files.length; x++) {
+
+						if(!toEmit[files[x].id]) {
+							toEmit[files[x].id] = files[x].id;
+							//util.log('Warn: Idempotency: deleting file id: ' + files[x].id);
+
+							var innerP  = util.deleteFile(files[x].id);
+							promises.push(innerP);
+						}
+						
+					}
+
+					//util.log('waiting on all promises');
+					Promise.all(promises).then( function success(results) {
+						//util.log('INFO:  Idempotency attained');
+
+						done();
+						
+					},
+					function error(e) {
+						util.errorlog('found error: ', e);
+						assert(1==2,'Checksum: Teardown: Removes files initialization failing');
+						done();
+						
+					})
+				},
+				function error(e) {
+					util.errorlog('found error: ', e);
+					assert(1==2,'Checksum: Teardown: Removes files initialization failing');
+					done();
+
+				})
+				
+			});
 		});
 
 	});
