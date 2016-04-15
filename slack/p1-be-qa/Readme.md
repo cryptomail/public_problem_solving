@@ -117,7 +117,7 @@ Both files.upload and files.delete appear to be asynchronous wherein the user ma
 
 ##Recommendation:
 Checksum the system.  If there is a meta data store storing meta data about files, then once in a while run a checksum to ensure that:
-1. The file purported to be in the meta data exists in S3 (expensive I know :frown: )
+1. The file purported to be in the meta data exists in S3 (expensive I know :cry: )
 2. The meta data is well formed.  The blank meta data could be caused by it being malformed.
 Here is what I would do:
 * find the module responsible
