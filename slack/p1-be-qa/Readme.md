@@ -116,6 +116,50 @@ I understand that 'eventual consistency' may be at play, but as you can see here
 Both files.upload and files.delete appear to be asynchronous wherein the user may upload a file, yet it may or may not show in the listing at the time of request, so testing would require knowledge of that.  These tests are architected in such a way that they exercise a class of the API one at a time.  In this case: files.upload, followed by files.list, followed by files.delete.
 
 
+#BUG #2 FOUND:
+Sending a file to a channel referenced multiple times yields an iteration on the same channel when it should not.
+Please see/analyze the following JavaScript:
+```javascript
+var fnameBase = 'kinderegg';
+      var fname = fnameBase + '.png';
+      var fnamePath = 'data' + '/' + fname;
+      var formData = {
+              channels: util.blabber('#general',1000,','),
+              token:  secretToken ,
+              file: {
+                value:  fs.createReadStream(fnamePath),
+                options: {
+                  filename: fname,
+                  contentType: 'image/png'
+                }
+              } 
+            };
+            
+      
+      util.issueSimplePOSTRequest('files','upload',formData)
+```
+
+Here we see the channels is blabbered/fuzzed with the same channel, resulting in the canonical output of 1000 messages to the same channel.
+
+There are two problems that I will exemplify: 
+
+1. The message delivery times out
+2. It emits the message 1000 times to the same channel
+
+This causes a test failure in my suite and it is my belief that the client is evil and should not be trusted and the message should NOT be emitted for as many times as there are the target channel.
+
+The code is under the block: `it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.')`
+
+#Aynchronous Quirk FOUND:
+It appears that some files take an inordinate amount of time to really disappear after asking for a formal delete.
+It is possible to query the system and get a valid listing of a file that has been requested for deletion, for **almost a minute** in some circumstances.  The test library will at some points emit that it attempted to delete a file, that comes back from a listing, only to find out later, when trying to clean it up, it's previously tagged as deleted.
+It is my opinion that after a file has been requested to be deleted, that it **never** show up in any results from a `files.list` query.
+
+
+#The Good:
+I have tested many fuzzy things like upload a PDF file, yet professing it's a PDF.
+Please check: `it(Positive: unset filetype or LIED to DOT FILE resolves to correct filetype')`
+When the listing query comes back from the file, the file is appropriately tagged with filetype PDF.  That means the system is adequately tesing for magic even if the file envelope is misleading.  :thumbsup: zats what I like to see :heart:
 
 
   
