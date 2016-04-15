@@ -51,7 +51,25 @@ String.prototype.endsWith = function(suffix) {
 
 var firstFileUploaded = null;
 
+function assert_thumbs(data, fnameBase) {
+
+	assert(data.thumb_64 != null,'thumb_64 defined');
+	assert(data.thumb_80 != null,'thumb_80 defined');
+	assert(data.thumb_360 != null,'thumb_360 defined');
+	assert(data.thumb_160 != null,'thumb_160 defined');
+	
+	var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
+	assert(data.thumb_64.endsWith(fname64));
+	var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
+	assert(data.thumb_80.endsWith(fname80));
+	var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
+	assert(data.thumb_360.endsWith(fname360));
+	var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
+	assert(data.thumb_160.endsWith(fname160));
+
+}
 describe('Test suite to test Slack 3 API Endpoints: files.upload, files.list, files.delete', function() {
+
 
 /*
 Library setup and initialization:
@@ -200,23 +218,9 @@ Never store keys in source code!  Only in configuration where access can/should 
 					filesUploaded[data.id] = data;
 					firstFileUploaded = data.id;
 
-					/*
-					TODO: this is a little -funroll-loops here :\
-					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
 					assert(data.channels && data.channels.length == 0);
-
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
+					assert_thumbs(data,fnameBase);
+					
 					done();
 				    
 		  		},
@@ -255,20 +259,8 @@ Never store keys in source code!  Only in configuration where access can/should 
 					/*
 					TODO: this is a little -funroll-loops here :\
 					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
 					assert(data.channels && data.channels.length == 0);
-
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
+					assert_thumbs(data,fnameBase);
 					done();
 				    
 		  		},
@@ -375,22 +367,11 @@ Never store keys in source code!  Only in configuration where access can/should 
 					/*
 					TODO: this is a little -funroll-loops here :\
 					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
+					assert(data.channels && data.channels.length == 1);
+					assert_thumbs(data,fnameBase);
+
+
 					
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
-
-
-					assert(data.channels && data.channels.length === 1);
 
 					util.getChannel('general').then(function success(channeldata) {
 
@@ -436,25 +417,9 @@ Never store keys in source code!  Only in configuration where access can/should 
 					Record what we wrote for later cleanup
 					*/
 					filesUploaded[data.id] = data;
-
-					/*
-					TODO: this is a little -funroll-loops here :\
-					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
 					
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
-
-					assert(data.channels && data.channels.length === 1);
+					assert(data.channels && data.channels.length == 1);
+					assert_thumbs(data,fnameBase);
 
 					util.getChannel('general').then(function success(channeldata) {
 
@@ -725,23 +690,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 					*/
 					filesUploaded[data.id] = data;
 
-					/*
-					TODO: this is a little -funroll-loops here :\
-					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
-					
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
-					
+					assert_thumbs(data,fnameBase);
 					assert(data.title && data.title.length == util.Limits.FILE_TITLE_LENGTH);
 					done();
 				    
@@ -815,22 +764,7 @@ Never store keys in source code!  Only in configuration where access can/should 
 					*/
 					filesUploaded[data.id] = data;
 
-					/*
-					TODO: this is a little -funroll-loops here :\
-					*/
-					assert(data.thumb_64 != null,'thumb_64 defined');
-					assert(data.thumb_80 != null,'thumb_80 defined');
-					assert(data.thumb_360 != null,'thumb_360 defined');
-					assert(data.thumb_160 != null,'thumb_160 defined');
-					
-					var fname64 = util.constructThumbFileNamePostfix(fnameBase,'_',64,'png');
-					assert(data.thumb_64.endsWith(fname64));
-					var fname80 = util.constructThumbFileNamePostfix(fnameBase,'_',80,'png');
-					assert(data.thumb_80.endsWith(fname80));
-					var fname360 = util.constructThumbFileNamePostfix(fnameBase,'_',360,'png');
-					assert(data.thumb_360.endsWith(fname360));
-					var fname160 = util.constructThumbFileNamePostfix(fnameBase,'_',160,'png');
-					assert(data.thumb_160.endsWith(fname160));
+					assert_thumbs(data,fnameBase);
 
 					assert(data.channels && data.channels.length === 1);
 
@@ -889,11 +823,10 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
-		it('Positive: Gets 1 image file on first page', function(done) {
+		it('Positive: Gets one image file on first page', function(done) {
 			util.getFiles(null,null,util.FilesFileTypes.IMAGES,1,1).then(function success(files) {
 				assert(files != null,'files should not be null');
 				assert(files.length === 1,'cardinality should be 1');
-
 				assert(filesUploaded[files[0].id],'Should be able to find the file ' + files[0].id);
 				done();	
 			},

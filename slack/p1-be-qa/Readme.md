@@ -66,7 +66,7 @@ Upon request, I will perform additional tests to suffce the above three items, o
 1. Simple positive tests
   * ~~Can get a count of all the images~~ 04/13/2016: Gets first file, looks at paging.count
   * ~~Can get a listing of all the images~~ 04/13/2016: Gets count from step above, and gets all files
-  * Test paging
+  * ~~Test paging~~ 04/14/2016: finds a file we uploaded.
 
 2. Negative tests
   * ~~Invalid auth~~04/13/2016

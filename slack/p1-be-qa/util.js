@@ -34,6 +34,7 @@ module.exports = function(baseURL, secretToken) {
  
 
   return {
+    debug_get_requests:false,
   	secretToken: secretToken,
     specialSnowflakeCount: 0, /* Slack has a bug where meta data may be incorrect! */
     baseURL: baseURL,
@@ -120,7 +121,9 @@ module.exports = function(baseURL, secretToken) {
           }
           
         } 
-
+        if(self.debug_get_requests) {
+          self.log(URL);
+        }
         
         /*
         Snap the main request
@@ -263,9 +266,6 @@ module.exports = function(baseURL, secretToken) {
       var self = this;
       var p = new Promise(function(resolve,reject) {
         
-        self.getFileCount(user,channel,types).then(
-        function success(count) {
-
           var iterations = Math.floor(count / self.Limits.MAX_FILES_IN_WINDOW) + 1;
           var x;
           var waitFor = [];
@@ -296,13 +296,6 @@ module.exports = function(baseURL, secretToken) {
               reject(e);
             })
           }
-          
-        },
-        function error(e) {
-
-          reject(e);
-        });
-        
       });
       return p;
     },
