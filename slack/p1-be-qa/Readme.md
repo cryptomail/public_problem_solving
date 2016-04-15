@@ -182,7 +182,7 @@ var fnameBase = 'really_a_pdf';
             util.issueSimplePOSTRequest('files','upload',formData)
 ```
 Look at that bold face lie on `contentType` in the file, and look at the `fname` variables. All patent LIES and yet Slack API gets it right.
-:thumbsup: zats what I like to see :heart:
+:thumbsup: zats what I like to see :heart:  A little bit of magic(5) goes a long way.
 
 
   
