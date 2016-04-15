@@ -851,6 +851,30 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
+		it('Negative: Gets one image file on lightly out of bound page', function(done) {
+			util.getFiles(null,null,util.FilesFileTypes.IMAGES,1,20).then(function success(files) {
+				
+				assert(files.length === 0,'cardinality should be 0');
+				done();	
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			});
+		});
+		it('Negative: Gets one image file on very out of bound page', function(done) {
+			util.getFiles(null,null,util.FilesFileTypes.IMAGES,1,101).then(function success(files) {
+				
+				assert(files.length === 1,'cardinality should be 1');
+				done();	
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			});
+		});
 		it('Negative: Can\'t gets all image files and matches count with invalid auth', function(done) {
 			util.secretToken =secretToken + 'misspiggy';
 			util.getAllFiles(null,null,util.FilesFileTypes.IMAGES).then(function success(files) {
