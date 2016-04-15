@@ -159,7 +159,25 @@ It is my opinion that after a file has been requested to be deleted, that it **n
 #The Good:
 I have tested many fuzzy things like upload a PDF file, yet professing it's a PDF.
 Please check: `it(Positive: unset filetype or LIED to DOT FILE resolves to correct filetype')`
-When the listing query comes back from the file, the file is appropriately tagged with filetype PDF.  That means the system is adequately tesing for magic even if the file envelope is misleading.  :thumbsup: zats what I like to see :heart:
+When the listing query comes back from the file, the file is appropriately tagged with filetype PDF.  That means the system is adequately tesing for magic even if the file envelope is misleading.  
+```javascript
+var fnameBase = 'really_a_pdf';
+      var fname = fnameBase + '.png';
+      var fnamePath = 'data' + '/' + fname;
+      var formData = {
+              token:  secretToken ,
+              file: {
+                value:  fs.createReadStream(fnamePath),
+                options: {
+                  filename: fname,
+                  contentType: 'image/png'
+                }
+              } 
+            };
+            util.issueSimplePOSTRequest('files','upload',formData)
+```
+Look at that bold face lie on contentType in the file, and look at the `fname` variables. All patent LIES and yet Slack API gets it right.
+:thumbsup: zats what I like to see :heart:
 
 
   
