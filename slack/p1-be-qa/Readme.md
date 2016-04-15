@@ -195,5 +195,13 @@ var fnameBase = 'really_a_pdf';
 Look at that bold face lie on `contentType` in the file, and look at the `fname` variables. All patent LIES and yet Slack API gets it right.
 :thumbsup: zats what I like to see :heart:  A little bit of magic(5) goes a long way.
 
+#Conclusion
+This was a fun exercise.  There were a lot of things I didn't cover.  Of note, I did not cover ```POST content``` message encoding at all, but instead, kept to the ```multipart\formdata``` variant, and that is an enhancement I would like to make later.  Furthermore I am sure I could come up with more fuzzing/bad data to really test against the quaility of the libraries used.  
 
-  
+###When the gloves come off and thumbnails are not clipped:
+If API developers are not careful and they do not keep up to date patches and use 3rd party libraries, it is possible that a nefarious actor can upload a nefarious payload thus causing damage and or intrusion into the systems.  If Slack API were to be using an outdated version of ImageMagick,  one of the attack vectors could be a carefully crafted malformed image that when processed, would allow the attacker to execute arbitrary code.
+https://www.cvedetails.com/vulnerability-list/vendor_id-1749/Imagemagick.html
+
+The slack API is proving to be a very diverse ecosystem and it's only going to get more complex as new features and capabilities are added.  It's important to take inventory on public API quality and risks while building them.
+Thanks for the opportunity to let me test it.
+
