@@ -387,6 +387,10 @@ module.exports = function(baseURL, secretToken) {
           }
           if(!data.ok) {
             data.file = fileId;
+            if(data.error === self.FilesErrorStates.FILE_DELETED) {
+              resolve(data);
+              return; 
+            }
             //self.log('DEBUG: delete file may have failed  ' + fileId);
             reject(data);
             return;

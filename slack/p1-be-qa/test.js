@@ -926,8 +926,8 @@ Never store keys in source code!  Only in configuration where access can/should 
 			})
 		});
 		it('Negative: cannot delete same file again', function(done) {
-			util.deleteFile(firstFileUploaded).then(function success(ok) {
-				assert(false,'Why did deleting same file work again?');
+			util.deleteFile(firstFileUploaded).then(function success(e) {
+				assert(e.error === util.FilesErrorStates.FILE_DELETED || e.error === util.FilesErrorStates.FILE_NOT_FOUND);
 				done();
 			},
 			function error(e) {
