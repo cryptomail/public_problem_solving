@@ -150,13 +150,18 @@ This causes a test failure in my suite and it is my belief that the client is ev
 
 The code is under the block: `it('Evil: Send to A LOT OF valid channels\nThis should pass in my opinion.')`
 
+##Recommendation:
+Do not iterate on the channels until they have been resolved to a set. aka pipe to uniq :fedora:
+
 #Aynchronous Quirk FOUND:
 It appears that some files take an inordinate amount of time to really disappear after asking for a formal delete.
 It is possible to query the system and get a valid listing of a file that has been requested for deletion, for **almost a minute** in some circumstances.  The test library will at some points emit that it attempted to delete a file, that comes back from a listing, only to find out later, when trying to clean it up, it's previously tagged as deleted.
 It is my opinion that after a file has been requested to be deleted, that it **never** show up in any results from a `files.list` query.
 
+##Recommendation:
+If a file has been requested for deletion,  ensure delete is synchronous,or fast enough to be perceived as such.
 
-#The Good:
+#The Very Good:
 I have tested many fuzzy things like upload a PDF file, yet professing it's a PDF.
 Please check: `it(Positive: unset filetype or LIED to DOT FILE resolves to correct filetype')`
 When the listing query comes back from the file, the file is appropriately tagged with filetype PDF.  That means the system is adequately tesing for magic even if the file envelope is misleading.  
