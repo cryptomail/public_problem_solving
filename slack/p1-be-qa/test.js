@@ -889,6 +889,30 @@ Never store keys in source code!  Only in configuration where access can/should 
 				done();
 			});
 		});
+		it('Evil: Gets one image file on invalid page type', function(done) {
+			util.getFiles(null,null,util.FilesFileTypes.IMAGES,1,'festivus').then(function success(files) {
+				
+				assert(files.length === 1,'cardinality should be 1');
+				done();	
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			});
+		});
+		it('Evil: Gets one image file on HUMUNGO BIGINT', function(done) {
+			util.getFiles(null,null,util.FilesFileTypes.IMAGES,1,99999999999999).then(function success(files) {
+				
+				assert(files.length === 1,'cardinality should be 1, dropping to page 1');
+				done();	
+			},
+			function error(e) {
+				util.errorlog(e);
+				assert(1==2,'Get file count failed');
+				done();
+			});
+		});
 		it('Positive: deletes first file', function(done) {
 			util.deleteFile(firstFileUploaded).then(function success(ok) {
 				delete filesUploaded[firstFileUploaded];

@@ -76,9 +76,8 @@ Upon request, I will perform additional tests to suffce the above three items, o
   
 
 3. Super evil tests
-  * Test paging bad type params
-  * Test filter type with all kinds of bad stuff (instructions specifically say to not do any exploration on type, but I'll do it anyway)
-  * Test paging HUGE / invalid numbers
+  * ~~Test paging bad type params~~ 04/13/2016
+  * ~~Test paging HUGE / invalid numbers~~ 04/13/2016
 
 ####Files.delete 
 1. Simple positive test
