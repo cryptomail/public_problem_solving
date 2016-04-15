@@ -71,8 +71,8 @@ Upon request, I will perform additional tests to suffce the above three items, o
 2. Negative tests
   * ~~Invalid auth~~04/13/2016
   * ~~No auth provided~~ 04/13/2016
-  * Test paging out of bounds
-  * Test paging fuzzed parameters
+  * ~~Test paging out of bounds~~ 04/13/2016
+  * ~~Test paging fuzzed parameters~~ 04/13/2016
   
 
 3. Super evil tests
