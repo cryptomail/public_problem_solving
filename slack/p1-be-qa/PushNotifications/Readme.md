@@ -47,7 +47,7 @@ The mechanics of testing this will fall under the following capabilities require
 
 
 
-
+![alt text](https://raw.githubusercontent.com/cryptomail/public_problem_solving/master/slack/p1-be-qa/PushNotifications/images/SlackPush.png "Slack Push Notifications Testing")
 
 
 
