@@ -9,7 +9,7 @@ Provide a high-level description of a system you would write to test Slack's pus
 
 
 ###Requirements Details:
-The mechanics of testing this will fall under the following capabilities requirements
+The mechanics of testing this will have the following capabilities requirements
 ####User state and stream activity management
 1. We need a way to emit arbitrary messages into a user's stream
 2. We need a way to aribtrarily set a user's idle state
