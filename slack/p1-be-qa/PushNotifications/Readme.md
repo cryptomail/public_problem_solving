@@ -32,9 +32,7 @@ The mechanics of testing this will fall under the following capabilities require
 
 ##Grand Assumptions And Necessities:
 1. The Slack back end consists of a series of broken out services to perform atomic operations on their specific domains
-2. The Slack back end is composable via configuration, and interfaces may be easily configured through fluent IoC or config files, thus allowing conformant interfaces to be switched out easily.
-
-
+2. The Slack back end is composable via configuration, and interfaces may be easily configured through fluent IoC or config files, thus allowing conformant interfaces to be switched out relatively easily.
 
 
 
