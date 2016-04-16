@@ -170,7 +170,7 @@ Do not iterate on the channels until they have been resolved to a set. aka pipe 
 It appears that some files take an inordinate amount of time to really disappear after asking for a formal delete.
 It is possible to query the system and get a valid listing of a file that has been requested for deletion, for **almost a minute** or never in some circumstances.  The test library will at some point emit that it attempted to delete a file, that comes back from a listing, only to find out later, when trying to clean it up, it's previously tagged as deleted.
 It is my opinion that after a file has been requested to be deleted, that it **never** show up in any results from a `files.list` query.
-As of the writing of this writeup, if  you were to perform files.list on the file ID F119AJ5MM it would show up, however if you were to request deleting it, it would return ok.false and error as previously deleted.
+As of the writing of this writeup, if  you were to perform files.list the file ID F119AJ5MM would show up, however if you were to request deleting it, it would return ok.false and error as previously deleted.
 
 
 ##Recommendation:
