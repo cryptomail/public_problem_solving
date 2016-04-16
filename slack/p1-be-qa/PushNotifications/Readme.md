@@ -28,6 +28,7 @@ The mechanics of testing this will have the following capabilities requirements
 1. The testing orchestration agent will write to the user service and set the user idle state, and user stream activity manager module
 2. The orchestration agent will read from the (specially constructed) orchestration lines from the mock push server
 3. The orchestration agent will write to the (specially constructed) orchestration lines from the mock push server
+4. The orchestration agent will be able to read arbitrary data from the push db.
 
 ##Grand Assumptions And Necessities:
 1. The Slack back end consists of a series of broken out services to perform atomic operations on their specific domains
