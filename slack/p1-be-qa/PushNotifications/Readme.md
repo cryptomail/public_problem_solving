@@ -45,7 +45,9 @@ The mechanics of testing this will have the following capabilities requirements
 2. Insert messages into the stream by talking to IMessageServer
 3. Assertion: Ensure the slack message database has a 'pending' status for the uniquey identifiable message injected into the system if the user is tagged as idle or offline.
 4. Assertion: Wait for the slack push processor to pick up the message that is 'pending' and sets the message state in the database to 'pending-processing' 
-5. Assertion: Read all push messages sent out for a user by querying the *TEST* version of the push server with the special Test interface, and ensure that we can read the expected pushes that were supposed to go out based on the number of devices registered.  Probably available via the UserService.
+5. Assertion: Read all push messages sent out for a user by querying the *TEST* version of the push server with the special Test interface, and ensure that we can read the expected pushes that were supposed to go out based on the number of devices registered, available via the UserService.  Assert correct cardinality, and device identifiers and formatting of output formatting.
+6. Assertion: Read the push database directly with the credentials given in configuration to assert the data records for those messages have been set to 'pushed' || retry based on configured fail state of mock push server.
+
 
 
 
