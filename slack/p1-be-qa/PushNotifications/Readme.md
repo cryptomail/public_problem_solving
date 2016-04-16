@@ -25,7 +25,7 @@ The mechanics of testing this will have the following capabilities requirements
 4. This push server affords orchestration control lines to determine whether messages will be tagged as failure or success when attempting to write to the network.
 
 ####Orchestration Layer For Testing
-1. The testing orchestration agent will write to the user state and user stream activity mangaer module
+1. The testing orchestration agent will write to the user state and user stream activity manager module
 2. The orchestration agent will read from the (specially constructed) orchestration lines from the mock push server
 3. The orchestration agent will write to the (specially constructed) orchestration lines from the mock push server
 
