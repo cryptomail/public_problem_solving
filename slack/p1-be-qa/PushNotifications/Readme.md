@@ -9,7 +9,7 @@ Provide a high-level description of a system you would write to test Slack's pus
 #High Level Description
 
 ##Grand Assumptions And Necessities:
-1. The Slack back end consists of a series of broken out services to perform atomic operations on their specific domains
+1. The Slack back end consists of a suite of broken out services to perform atomic operations on their specific domains
 2. The Slack back end is composable via configuration, and interfaces may be easily configured through fluent IoC or config files, thus allowing conformant interfaces to be switched out relatively easily for the purposes of testing.
 
 
