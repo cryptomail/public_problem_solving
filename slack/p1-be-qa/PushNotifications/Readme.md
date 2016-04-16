@@ -28,11 +28,24 @@ The mechanics of testing this will fall under the following capabilities require
 2. The orchestration agent will read from the (specially constructed) orchestration lines from the mock push server
 3. The orchestration agent will write to the (specially constructed) orchestration lines from the mock push server
 
-
-
 ##Grand Assumptions And Necessities:
 1. The Slack back end consists of a series of broken out services to perform atomic operations on their specific domains
-2. The Slack back end is composable via configuration, and interfaces may be easily configured through fluent IoC or config files, thus allowing conformant interfaces to be switched out relatively easily.
+2. The Slack back end is composable via configuration, and interfaces may be easily configured through fluent IoC or config files, thus allowing conformant interfaces to be switched out relatively easily for the purposes of testing.
+
+###Testing the system
+####Setup:
+1. Put in place a replacement IPushServer that records all traffic emitted out and allows the test orchestrator to determine whether the push should fail/succeed.
+2. Enusre the test orchestrator can inject messages into the system with an internal interface, and also talk to the composed UserService which determines idle status.  I don't know if things are composed this way but that's how I'd architect it.
+3. Ensure the test orchestrator can talk to the test IPushServer and set whether the push will succeed/fail with setAuthFail(true||false)
+
+####Testing
+1. Ensure the user is idle or not idle.  For push notifications set the user to idle simulating 15min of idle
+2. Insert messages into the stream by talking to IMessageServer
+3. Assertion: Ensure the slack message database has a 'pending' status for the uniquey identifiable message injected into the system
+4. Assertion: Wait for the slack push processor to pick up the message that is 'pending' and sets the message state in the database to 'pending-processing' || 
+5. Assertion: Read all push messages sent out for a user by querying the *TEST* version of the push server with the special Test interface, and ensure that we can read the expected pushes that were supposed to go out.
+
+
 
 
 
