@@ -5,6 +5,7 @@ Provide a high-level description of a system you would write to test Slack's pus
 * Pending messages are pushed to all active push tokens that the user's devices have registered with us
 * The messages sent to the push notification servers contain the correct content and are properly formatted
 * Pushed messages are switched from the "pending" state to the "pushed" state in the DB
+
 #High Level Description
 
 
