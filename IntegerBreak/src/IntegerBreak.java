@@ -51,6 +51,9 @@ public class IntegerBreak {
 
 				int psum1 = p1*p2;
 				int psum2 = 0;
+				/*
+				 * Super awesome induction on the tail :)
+				 */
 				if(times > 1) {
 					int p11 = (int)(Math.pow(divisor,times-1));
 					int p22 = Math.max(integerBreak(leftover+divisor),divisor+leftover);
